@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f7b6c%27/%3E%3Cpath d=%27M12 46 26 30l8 8 18-22%27 stroke=%27white%27 stroke-width=%277%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<title>AI Engineer〈All Code Is Slop (Except Mine) — Lauren Tan, SpaceXSI〉（非官方繁中譯文）</title>
+<meta name="description" content="Lauren Tan〈All Code Is Slop (Except Mine)〉全文繁體中文譯文，採台灣用語；依 YouTube 機器字幕由 AI 翻譯，未逐句對照原音。">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:title" content="AI Engineer〈All Code Is Slop (Except Mine) — Lauren Tan, SpaceXSI〉（非官方繁中譯文）">
+<meta property="og:description" content="Lauren Tan〈All Code Is Slop (Except Mine)〉全文繁體中文譯文，採台灣用語；依 YouTube 機器字幕由 AI 翻譯，未逐句對照原音。">
+<meta property="og:image" content="https://lushinshang.github.io/lauren-tan-code-slop/images/og-hero.jpg">
+<meta property="og:image:width" content="1120">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="原創 AI 插畫：奶油色溫室裡，園丁獺與小苗站在木籬笆旁，雜草逐漸轉為金色麥田。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AI Engineer〈All Code Is Slop (Except Mine) — Lauren Tan, SpaceXSI〉（非官方繁中譯文）">
+<meta name="twitter:description" content="Lauren Tan〈All Code Is Slop (Except Mine)〉全文繁體中文譯文，採台灣用語；依 YouTube 機器字幕由 AI 翻譯，未逐句對照原音。">
+<meta name="twitter:image" content="https://lushinshang.github.io/lauren-tan-code-slop/images/og-hero.jpg">
+<meta property="og:url" content="https://lushinshang.github.io/lauren-tan-code-slop/translation-zh.html">
+<style>
+:root{
+  --bg:#f9f7f4; --surface:#fffdf9; --ink:#1a1a1a; --muted:#5f5b54; --line:#e4dfd6;
+  --accent:#0f7b6c; --accent-ink:#0b5c51; --note:#f0ebe1; --code:#ece6d8; --link:#1f5f99;
+  --card:#fff6e8; --card-line:#e8c99a; --shadow:0 6px 24px rgba(40,30,10,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#1b1a18; --surface:#26241f; --ink:#ece8de; --muted:#aaa497; --line:#3a3730;
+    --accent:#4fc1ad; --accent-ink:#7fd6c6; --note:#2f2c25; --code:#33302a; --link:#8fbde8;
+    --card:#2d2820; --card-line:#5b4a30; --shadow:0 6px 24px rgba(0,0,0,.35);}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;
+  font:17px/1.7 "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;letter-spacing:0}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:#fff;padding:8px 14px;z-index:300}
+.skip:focus{left:8px;top:8px}
+nav.toc{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.toc ul{list-style:none;margin:0 auto;padding:0 16px;max-width:1120px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+  white-space:nowrap;-webkit-overflow-scrolling:touch;min-height:52px;align-items:center}
+nav.toc ul::-webkit-scrollbar{display:none}
+nav.toc a{display:inline-block;padding:8px 12px;border-radius:999px;color:var(--muted);text-decoration:none;font-size:14px;min-height:36px}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--note);color:var(--ink)}
+a{color:var(--link);overflow-wrap:anywhere}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.page{max-width:1120px;margin:0 auto;padding:0 20px 80px}
+header.hero{padding:56px 0 8px;text-align:center}
+.eyebrow{margin:0 0 8px;color:var(--accent-ink);font-weight:700;letter-spacing:0;font-size:14px}
+h1{margin:0 auto 14px;max-width:820px;font-size:clamp(1.7rem,1.2rem + 2vw,2.6rem);line-height:1.3;text-wrap:balance}
+.byline{margin:0 0 6px;color:var(--muted);font-size:14px}
+.video-link{margin:0 0 28px;font-size:14px}
+figure{margin:32px 0}
+figure img{display:block;width:100%;height:auto;aspect-ratio:var(--ar-d,16/9);object-fit:contain;border-radius:12px;
+  box-shadow:var(--shadow);background:var(--surface);cursor:zoom-in}
+@media (max-width:640px){figure picture img{aspect-ratio:var(--ar-m,9/16)}}
+@media (max-width:640px){figure.hero-figure picture img{max-width:300px;margin:0 auto}}
+figure.hero-figure{max-width:720px;margin-left:auto;margin-right:auto}
+hr{border:0;border-top:1px solid var(--line);margin:40px 0}
+p.figcap{margin:-18px auto 1.4em;text-align:center;font-size:14px;color:var(--muted)}
+figcaption{margin:10px auto 0;max-width:720px;font-size:14px;line-height:1.55;color:var(--muted);text-align:center}
+article{max-width:720px;margin:0 auto}
+article figure.section-figure{margin-left:50%;transform:translateX(-50%);width:min(860px,calc(100vw - 32px))}
+h2{margin:56px 0 12px;font-size:1.55rem;line-height:1.4;scroll-margin-top:72px;text-wrap:balance;
+  border-left:5px solid var(--accent);padding-left:14px;margin-left:-19px}
+h3{margin:36px 0 8px;font-size:1.2rem;line-height:1.45}
+p{margin:0 0 1.1em}
+ul,ol{margin:0 0 1.2em;padding-left:1.4em}
+li{margin:.35em 0}
+strong{font-weight:700}
+code{background:var(--code);padding:.1em .4em;border-radius:5px;font:0.9em ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
+section.summary-card{background:var(--card);border:1px solid var(--card-line);border-radius:14px;padding:6px 22px 10px;margin:24px 0 8px;box-shadow:var(--shadow)}
+section.summary-card h2{margin:14px 0 8px;font-size:1.2rem;border-left:0;padding-left:0;margin-left:0}
+section.summary-card p{margin:0 0 .8em;font-size:16.5px}
+ol.takeaways{padding-left:1.6em}
+ol.takeaways li{margin:.8em 0;padding-left:.2em}
+ol.takeaways li::marker{color:var(--accent-ink);font-weight:700}
+ul.sources li{overflow-wrap:anywhere}
+aside.note{background:var(--note);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;margin:0 0 1.6em;font-size:15px;color:var(--ink)}
+aside.note p,aside.note ul{margin:0 0 .6em}
+aside.note ul{padding-left:1.3em}
+figure.diagram{margin:28px 0}
+.mermaid-scroll{overflow-x:auto;max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;-webkit-overflow-scrolling:touch}
+.mermaid-scroll pre{margin:0;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;color:var(--ink)}
+.mermaid-scroll svg{display:block;margin:0 auto;height:auto;max-width:100%}
+.table-scroll{overflow-x:auto;margin:0 0 1.6em;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.table-scroll table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;line-height:1.55}
+.table-scroll th,.table-scroll td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.table-scroll th{background:var(--note);font-weight:700}
+.table-scroll tr:last-child td{border-bottom:0}
+.table-scroll td.k{font-weight:600;white-space:nowrap}
+.table-scroll td.nw{white-space:nowrap}
+.table-scroll.wide{margin-left:50%;transform:translateX(-50%);width:min(1040px,calc(100vw - 32px))}
+@media (max-width:640px){.table-scroll.wide{margin-left:0;transform:none;width:auto}}
+@media (max-width:640px){
+  .table-scroll{overflow-x:visible}
+  .table-scroll table{min-width:0}
+  .table-scroll thead{position:absolute;left:-9999px}
+  .table-scroll tr,.table-scroll td{display:block}
+  .table-scroll tr{padding:10px 12px;border-bottom:1px solid var(--line)}
+  .table-scroll tr:last-child{border-bottom:0}
+  .table-scroll td{padding:2px 0;border:0}
+  .table-scroll td.k{color:var(--accent-ink);white-space:normal}
+  .table-scroll td.nw{white-space:normal}
+  .table-scroll td::before{content:attr(data-label) "：";font-weight:700;color:var(--muted);font-size:13px}
+}
+
+p.lede{margin:0 auto 10px;max-width:760px;color:var(--muted);font-size:16px;line-height:1.65}
+footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+.lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,18,14,.9);align-items:center;justify-content:center;padding:24px}
+.lightbox.is-open{display:flex}
+.lightbox img{max-width:96vw;max-height:90vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.5);background:#fff}
+.lightbox button{position:absolute;top:14px;right:14px;min-width:44px;min-height:44px;padding:8px 14px;border:0;border-radius:999px;
+  background:#fff;color:#222;font-size:15px;cursor:pointer}
+@media (max-width:760px){
+  h2{margin-left:0;border-left:0;padding-left:0;border-top:3px solid var(--accent);padding-top:10px}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .page{padding:0 16px 64px}
+  header.hero{padding-top:36px}
+  h2{font-size:1.35rem}
+  section.summary-card{padding:4px 16px 8px}
+}
+</style>
+<meta name="color-scheme" content="light dark">
+<style>
+/* 溫室麥田。色彩只作呈現；正文、圖說與來源不依賴動態。 */
+:root,:root[data-theme="light"]{
+  color-scheme:light;--bg:#FFF7E6;--surface:#fffbf2;--ink:#2B2F3A;--muted:#5e6252;
+  --line:#c7c5aa;--accent:#5E8F5A;--accent-ink:#375e35;--link:#335c7b;
+  --note:#edf0de;--code:#e8e6d6;--card:#FFF7E6;--card-line:#b6a784;
+  --shadow:0 3px 0 #baa67533,0 16px 34px #4739160c;
+  --field-start:#e7efda;--field-end:#fae8b8;--field:var(--field-start);--harvest:0;
+  --focus:#91400e;--fence:#8d7653;--paper-ink:#2B2F3A;--paper-muted:#605d4e;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark;--bg:#1D2420;--surface:#27302a;--ink:#FFF7E6;--muted:#cecdb9;--line:#56644e;--accent:#a7c791;--accent-ink:#c4dda6;--link:#a8d7ef;--note:#303d30;--code:#354234;--field-start:#243429;--field-end:#3b3523;--focus:#f2bf63;--fence:#c6ad78;--shadow:0 3px 0 #0003,0 16px 34px #0002}
+}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#1D2420;--surface:#27302a;--ink:#FFF7E6;--muted:#cecdb9;--line:#56644e;--accent:#a7c791;--accent-ink:#c4dda6;--link:#a8d7ef;--note:#303d30;--code:#354234;--field-start:#243429;--field-end:#3b3523;--focus:#f2bf63;--fence:#c6ad78;--shadow:0 3px 0 #0003,0 16px 34px #0002}
+html{background:var(--bg);scroll-padding-top:28px}
+body.garden-page{background:var(--bg);color:var(--ink);font:17px/1.9 -apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;overflow-x:clip;isolation:isolate}
+body.garden-read::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,var(--field),transparent 24%,transparent 76%,var(--field));opacity:.85}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+h1,h2,h3,.seed-packet,.garden-brand{font-family:ui-rounded,"PingFang TC","Noto Sans TC",sans-serif}
+h1,h2,h3{overflow-wrap:anywhere}
+button,input,select{font:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
+a{color:var(--link);text-underline-offset:.22em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus)!important;outline-offset:5px!important;border-radius:3px}
+.skip{background:var(--ink);color:var(--bg)}
+.garden-mast{max-width:1240px;margin:0 auto;padding:20px 44px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);font-size:14px;min-height:84px}
+.garden-brand{color:var(--ink);font-size:19px;font-weight:800;text-decoration:none;white-space:nowrap}
+.garden-brand>span{font-size:28px;color:var(--accent-ink);vertical-align:middle;margin-right:8px}
+.garden-brand small{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.12em;margin-left:18px;font-weight:500}
+.garden-mast nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.garden-mast nav a{min-height:44px;display:inline-flex;align-items:center;text-decoration:none;color:var(--ink)}
+.garden-mast nav a[aria-current]{text-decoration:underline;text-decoration-color:var(--accent-ink);text-decoration-thickness:2px}
+.theme-toggle{min-height:44px;min-width:64px;padding:5px 14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:24px;cursor:pointer;font-size:14px}
+.theme-toggle:hover{background:var(--note)}
+.page{max-width:1200px;padding:0 48px 80px;margin:auto}
+header.opening{min-height:0;padding:62px 0 76px;position:relative}
+header.opening .eyebrow{font-size:13px;color:var(--accent-ink);letter-spacing:.24em;border:1px solid var(--line);border-radius:4px;padding:4px 15px;margin-bottom:24px}
+header.opening h1{font-size:clamp(2.1rem,4.7vw,4.1rem);line-height:1.22;letter-spacing:-.045em;max-width:970px;margin:0 auto 22px;text-wrap:balance;font-weight:850}
+header.opening .lede{max-width:740px;font-size:18px;line-height:1.8;color:var(--muted);margin-bottom:18px}
+.byline{font-size:13px;color:var(--muted)}
+header.opening figure.hero-figure{width:100%;max-width:none;margin:36px 0 0;position:relative}
+figure.hero-figure img{border:1px solid var(--card-line);border-radius:100px 100px 8px 8px;background:#FFF7E6;box-shadow:var(--shadow);width:100%;max-width:none}
+figcaption{line-height:1.8;font-size:14px;text-align:left;max-width:none;color:var(--paper-muted);padding:13px 16px 3px;margin:0}
+figure.hero-figure figcaption{color:var(--muted);padding:12px 0;text-align:center}
+header.opening .intro{max-width:680px;font-size:17px;line-height:1.95}
+.garden-friends{display:flex;align-items:center;justify-content:center;gap:8px;margin:25px auto 24px;color:var(--muted);font-size:14px}
+.garden-friends svg{width:145px;height:118px;overflow:visible}
+.garden-friends span{writing-mode:vertical-rl;letter-spacing:.13em}
+.blink-eye{transform-box:fill-box;transform-origin:center}
+@media(prefers-reduced-motion:no-preference){.garden-friends:hover .blink-eye{animation:blink .8s ease-in-out}@keyframes blink{0%,38%,70%,100%{transform:scaleY(1)}45%,57%{transform:scaleY(.08)}}}
+aside.note{border-left:3px solid var(--accent);border-radius:2px 16px 16px 2px;padding:18px 22px;background:var(--note);font-size:15px;line-height:1.85;color:var(--ink)}
+.cue{font-size:12px;letter-spacing:.18em;color:var(--muted);margin-top:25px}
+.cue span{animation:none!important;font-size:20px;margin-top:8px}
+section.scene{max-width:680px;padding:74px 0 68px;position:relative;scroll-margin-top:24px}
+section.scene::before{content:"";display:block;position:absolute;top:0;left:0;right:0;height:20px;opacity:.65;background:repeating-linear-gradient(90deg,transparent 0 26px,var(--fence) 26px 29px,transparent 29px 58px),linear-gradient(transparent 5px,var(--fence) 5px 7px,transparent 7px 13px,var(--fence) 13px 15px,transparent 15px);border-radius:3px}
+section.scene.layout-sticky{max-width:1104px}
+section.scene h2{border:0;margin:0 0 34px;padding:0;font-size:clamp(1.7rem,2.5vw,2.4rem);line-height:1.5;letter-spacing:-.025em;max-width:760px;text-wrap:pretty}
+section.scene h3{font-size:1.2rem;margin-top:32px}
+.seed-packet{display:inline-flex;flex-wrap:wrap;gap:4px 16px;align-items:center;max-width:100%;padding:10px 18px;margin-bottom:22px;color:#473c28;background:#f6e5ba;border:1px solid #ac976a;border-top:5px double #ac976a;border-radius:3px 3px 12px 3px;box-shadow:2px 3px 0 #8d765313;font-size:12px;line-height:1.8;letter-spacing:.04em}
+.seed-packet span:first-child{font-weight:800;font-size:13px}
+section.layout-sticky .scene-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px}
+section.layout-sticky .scene-media{top:12vh}
+section.layout-sticky .step{margin-bottom:11vh}
+section.layout-sticky .step:last-child{margin-bottom:3vh}
+/* 非作用中的步驟亦保持完整對比，動畫只控制首次揭露。 */
+.live section.layout-sticky .step:not(.is-active){opacity:1}
+.scene-flow p,.scene-flow li,.scene-steps p,.scene-steps li{max-width:40em;overflow-wrap:anywhere}
+figure.section-figure{background:#FFF7E6;color:#2B2F3A;border:1px solid #c9b88e;border-radius:9px;padding:10px 10px 16px;margin:34px 0;box-shadow:var(--shadow)}
+figure.section-figure img{background:#FFF7E6;border-radius:4px;box-shadow:none}
+figure.section-figure figcaption a{color:#335c7b}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:28px}
+.stat{background:#FFF7E6;color:#2B2F3A;border:1.5px solid #b4a17a;border-radius:3px 14px 5px 8px;padding:18px 16px;box-shadow:3px 4px 0 #b9a16b24;position:relative;min-width:0}
+.stat::before{content:"";display:block;width:30px;height:5px;background:#E8B923;margin-bottom:18px;border-radius:4px;transform:rotate(-4deg)}
+.stat:nth-child(2)::before{background:#5E8F5A}.stat:nth-child(3)::before{background:#F08A3C}.stat:nth-child(4)::before{background:#5DAEE0}
+.stat .num{font-family:"Chalkboard SE","Comic Sans MS",ui-rounded,"PingFang TC",sans-serif;font-size:clamp(2rem,3vw,2.75rem);color:#2B2F3A;font-weight:700;letter-spacing:-.04em;white-space:nowrap}
+.stat .lbl{font-size:13px;line-height:1.9;color:#605d4e;margin-top:12px}
+.tier{display:inline-block;vertical-align:.08em;padding:1px 6px;white-space:nowrap;margin:0 3px;border:1px solid currentColor;border-radius:4px;font-size:11px;font-weight:650;line-height:1.65;letter-spacing:.03em}
+.t-primary{color:#2c522c;background:#e2ecd5}.t-screen{color:#294d67;background:#dbedf4}.t-speaker{color:#753d15;background:#fce1be}.t-secondary{color:#80322f;background:#f8ded4}.t-inference{color:#66501a;background:#f7edbc}
+a[href*="t="]{padding:1px 3px;border-radius:4px;white-space:nowrap;position:relative}
+a[href*="t="]::before{content:"";display:inline-block;width:0;height:9px;opacity:0;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%);transition:width .15s,opacity .15s}
+a[href*="t="]:hover::before,a[href*="t="]:focus-visible::before{width:8px;margin-right:4px;opacity:1}
+.table-scroll{border-color:var(--line);border-radius:6px}
+.table-scroll table{line-height:1.85}
+.table-scroll th,.table-scroll td{padding:14px 16px}
+.table-scroll.wide{width:100%;margin-left:0;transform:none}
+.pagefoot{max-width:680px;line-height:1.85;border-top:1px solid var(--line);margin:55px auto 0;padding:28px 0;color:var(--muted);font-size:14px}
+/* 保留內建進度數值，顯示介面由小苗承接。 */
+.progress{width:0;height:0;overflow:hidden;inset:0 auto auto 0;background:none}
+.growth-meter{position:fixed;left:18px;bottom:22px;width:48px;z-index:40;pointer-events:none;color:var(--muted)}
+.growth-meter svg{width:48px;height:150px;overflow:visible;stroke:#456d3c;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.growth-meter .soil{stroke:var(--fence)}
+.growing{transform-origin:32px 164px;transform:scaleY(calc(.22 + var(--growth,0)*.78))}
+.leaf{fill:#92b66e}.wheat{fill:#E8B923;stroke:#755c21;opacity:var(--ripe,0)}
+.growth-meter span{font-size:10px;writing-mode:vertical-rl;position:absolute;bottom:20px;left:-4px;letter-spacing:.12em}
+nav.dots{right:18px}
+nav.dots ol{gap:0}
+nav.dots a{width:32px;height:32px}
+nav.dots a::before{content:"";position:absolute;left:15px;top:6px;height:22px;width:1px;background:var(--fence);transform:rotate(20deg)}
+nav.dots a::after{inset:7px 10px 11px 14px;width:8px;height:12px;border-radius:80% 0 80% 0;background:var(--muted);transform:rotate(20deg);box-shadow:-7px 5px 0 -1px var(--muted)}
+nav.dots a.is-active::after{background:var(--accent-ink);box-shadow:-7px 5px 0 -1px var(--accent-ink);transform:rotate(20deg) scale(1.2)}
+nav.dots a:hover::after{background:var(--accent-ink)}
+.lightbox{padding:70px 16px 24px;background:#151b17f5}
+.lightbox img{background:#FFF7E6;max-height:calc(100dvh - 100px);max-width:96vw}
+.lightbox button{background:#FFF7E6;color:#2B2F3A;border:1px solid #a28d61;font-size:14px;line-height:1.5}
+/* 播放器與全文譯文沿用相同色票與頁首。 */
+.garden-translation header.hero,.garden-player header.hero{padding:52px 0 26px}
+.garden-translation h1,.garden-player h1{font-size:clamp(1.8rem,3vw,2.8rem);line-height:1.4}
+.garden-translation article{max-width:680px}
+.garden-translation article h2{border-left:0;margin-left:0;padding:28px 0 0;border-top:2px solid var(--fence);line-height:1.6}
+.garden-translation nav.toc{background:var(--bg)}
+.garden-player .page{max-width:1120px}
+.garden-player .note{background:var(--note);color:var(--ink);border-color:var(--line);line-height:1.9}
+.garden-player .bar button,.garden-player .bar select{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.garden-player #list li.on button,.garden-player .yt-fallback{background:var(--note);color:var(--ink)}
+@media(max-width:1180px){.growth-meter{left:10px;width:32px}.growth-meter svg{width:32px}.growth-meter span{display:none}.garden-mast{padding-left:32px;padding-right:32px}}
+@media(max-width:860px){
+  .page{padding:0 28px 55px}.garden-brand small{display:none}
+  header.opening{padding-top:42px;padding-bottom:60px}header.opening h1{font-size:clamp(2rem,6vw,3rem)}
+  section.layout-sticky .scene-grid{display:block}section.layout-sticky .scene-media{position:static}
+  section.layout-sticky .step{margin-bottom:0}section.layout-sticky .step:last-child{margin-bottom:0}
+  section.layout-sticky .scene-media figure{margin:0 0 30px}
+  section.scene{padding:60px 0 46px}section.scene.layout-sticky{max-width:680px}
+}
+@media(max-width:640px){
+  body.garden-page{font-size:16px;line-height:1.9}.page{padding:0 24px 48px}
+  .garden-mast{padding:14px 24px;gap:7px;flex-direction:column;align-items:flex-start;min-height:110px}
+  .garden-brand{font-size:18px}.garden-mast nav{width:100%;justify-content:space-between;gap:12px;font-size:13px}.theme-toggle{min-width:60px;font-size:13px}
+  header.opening{padding:35px 0 50px}header.opening h1{font-size:34px;line-height:1.35;letter-spacing:-.04em;margin-bottom:18px;text-wrap:pretty}
+  header.opening .eyebrow{margin-bottom:18px;font-size:12px}header.opening .lede{font-size:16px;text-align:left;line-height:1.9}
+  .byline{font-size:12px}header.opening figure.hero-figure{margin-top:24px}
+  figure.hero-figure picture img{max-width:none;border-radius:70px 70px 6px 6px}
+  header.opening .intro{font-size:16px;line-height:1.9}.garden-friends{margin:12px auto 20px}
+  section.scene h2{font-size:26px;line-height:1.55;margin-bottom:24px}.seed-packet{padding:8px 12px;margin-bottom:20px;font-size:11px}
+  figure.section-figure{padding:7px 7px 12px;margin:28px 0}figcaption{font-size:13px;padding:12px 8px 0}
+  .stats{gap:12px}.stat{padding:14px 11px}.stat .num{font-size:32px}.stat .lbl{font-size:12px}.stat::before{margin-bottom:12px}
+  .growth-meter{left:2px;bottom:10px;width:18px}.growth-meter svg{width:18px;height:85px}
+  aside.note{padding:15px 16px;font-size:14px}.pagefoot{font-size:13px}
+  .table-scroll td{padding:6px 0}.table-scroll tr{padding:12px 14px}
+  .garden-player .page{padding:0 16px 40px}.garden-player .bar{gap:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}*,*::before,*::after{animation:none!important;transition:none!important}
+  body.garden-read::before{background:linear-gradient(90deg,var(--field-start),transparent 25%,transparent 75%,var(--field-start))}
+  .rv,.live .rv,.step{opacity:1!important;transform:none!important}
+  .growing{transform:none}.wheat{opacity:1}.blink-eye{transform:none!important}
+}
+@media print{.garden-mast,.growth-meter,.garden-friends,.cue,nav.dots{display:none!important}body.garden-read::before{display:none}.page{padding:0}section.scene{padding:24px 0}section.scene::before{display:none}section.layout-sticky .scene-grid{display:block}section.layout-sticky .scene-media{position:static}section.layout-sticky .step{margin-bottom:0}.rv{opacity:1!important;transform:none!important}}
+
+</style>
+</head>
+<body class="garden-page garden-translation">
+<div class="garden-mast"><a class="garden-brand" href="read.html" aria-label="溫室麥田：Lauren Tan 導讀"><span aria-hidden="true">✳</span> 溫室麥田 <small>LAUREN TAN · 導讀</small></a><nav aria-label="閱讀方式"><a href="read.html">長文</a><a href="player.html">播放器</a><a href="translation-zh.html" aria-current="page">譯文</a><button class="theme-toggle" type="button" aria-label="切換深色模式" hidden>深色</button></nav></div>
+<a class="skip" href="#main">跳到正文</a>
+<nav class="toc" aria-label="章節導覽"><ul><li><a href="#sec-1" title="章節 1：把 slop 變成黃金（00:00）">1·00:00</a></li><li><a href="#sec-2" title="章節 2：信任金字塔與程式碼庫品質（02:03）">2·02:03</a></li><li><a href="#sec-3" title="章節 3：Dune 與可強制執行的架構（05:00）">3·05:00</a></li><li><a href="#sec-4" title="章節 4：用 lint 規則取代註解（06:56）">4·06:56</a></li><li><a href="#sec-5" title="章節 5：執行期驗證與功能地圖（09:40）">5·09:40</a></li><li><a href="#sec-6" title="章節 6：形式驗證與 UI 測試（10:50）">6·10:50</a></li><li><a href="#sec-7" title="章節 7：把 token 花在驗證上（11:51）">7·11:51</a></li><li><a href="#sec-8" title="章節 8：11,000 個 PR 與約 0.5% 的還原率（13:32）">8·13:32</a></li><li><a href="#sec-9" title="章節 9：先打好基礎，再蓋軟體工廠（15:11）">9·15:11</a></li></ul></nav>
+<div class="page">
+<header class="hero">
+<p class="eyebrow">全文譯本（非官方）</p>
+<h1>AI Engineer〈All Code Is Slop (Except Mine) — Lauren Tan, SpaceXSI〉（非官方繁中譯文）</h1>
+<p class="lede">AI Engineer 頻道，2026-11-14 上傳，依 YouTube 機器字幕翻譯</p>
+<p class="byline">原影片：AI Engineer，2026-11-14 上傳　譯本整理：2026-11-15</p>
+</header>
+<main id="main"><article>
+<aside class="note"><p>本頁為非官方繁體中文譯文，依 YouTube 機器字幕整理；中文為 AI 翻譯，未逐句對照原音，可能有誤。影片與講者簡報版權屬原權利人，若有出入，以原影片為準。</p></aside>
+<p>英文是 YouTube 機器字幕 en-orig，已合併成較長的句子；中文由 agy gemini-3.8-flash 翻譯後經 Opus 逐句閱讀，未經人工校稿，也未逐句對照原音。機器字幕把 poteto 聽成 Potato、Grok Bot 聽成 Graph Bot／Growth Bot／Gulp bot 等，中文已更正，英文欄保留原機器字幕。本片為 Lauren Tan 單人演講。影片為 AI Engineer 頻道上傳，講者任職資訊來自影片版面與投影片，不代表公司官方背書。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g" target="_blank" rel="noopener noreferrer">原影片</a> · <a href="read.html">完整導讀</a> · <a href="player.html">雙語字幕播放器</a></p>
+<hr>
+<h2 id="sec-1">章節 1：把 slop 變成黃金（00:00）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=16s" target="_blank" rel="noopener noreferrer">00:16</a> 好的，再次自我介紹，我的名字是 poteto。我在 SpaceXSI 負責 Grok Bot。大家可以快速舉個手嗎？你們當中有多少人曾看過別人寫的程式碼，心裡想著「這全都是低品質的雜訊程式碼（slop）」？嗯，我也曾經這樣覺得。但今天我要說服你們，你可以把那些 slop 變成黃金。上個月我做了一件很瘋狂的事，我把 3,000 個 PR 發布到了正式環境。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=48s" target="_blank" rel="noopener noreferrer">00:48</a> 在有 agent 之前，除了一些極端案例之外，我們其實從來不在乎數量。而在我前一家公司，我們稱這些人為寫程式機器。像 Bret Taylor 這樣的人，他最著名的就是在一個週末內重寫了整個 Google Maps。完全是個生產力高到不可思議的工程師。而現在有了 agent，任何人都可以成為寫程式機器。我的論點是，軟體工程師的工作，身為軟體工程師的核心本質，就是在大幅提升生產力的同時，找出如何維持甚至改善程式碼品質的方法。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=83s" target="_blank" rel="noopener noreferrer">01:23</a> 為了達到這個境界，有些人喜歡稱之為軟體工廠（software factory）。但我喜歡保持簡單，我認為這一切都關乎信任。不是盲目的信任，而是投資在你的 agent 環境上，讓你能夠信任你的 agents 會做正確的事。要達到這個境界需要付出相當多的心力，我花了 6 個月才達到可以交付數千個 PR 的狀態，其中很多甚至是在我睡覺時完成的。但這絕對是可能的，而且你們花的時間會比我少得多。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=116s" target="_blank" rel="noopener noreferrer">01:56</a> 所以我們先來談談如何從低信任度轉變為高信任度的環境。</p>
+<h2 id="sec-2">章節 2：信任金字塔與程式碼庫品質（02:03）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=125s" target="_blank" rel="noopener noreferrer">02:05</a> 這座倒金字塔就是我對於該把時間花在 agent 環境哪裡的思考方式。前兩層是確定性的，也就是運用你的程式碼本身。像是良好的 API 設計、架構、重構，或是使用 lint 規則、型別系統、編譯器，或是各種類型的測試。你可以結合這兩層來約束 agents 能做的事情，並迫使它們預設就做正確的事。驗證（包含執行期驗證與形式驗證）是很棒的工具，可以疊加進來找出 bug 並檢查屬性</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=159s" target="_blank" rel="noopener noreferrer">02:39</a> 以及你希望在系統中始終維持的不變量，同時也能幫你檢查 agent 是否理解了你的目標與意圖。最後，你會想疊加一點自然語言的描述。像是 rules、skills、AGENTS.md，這些需要判斷力的事情。但我們先從你的程式碼庫（codebase）開始。Agents 是根據輸入來產生輸出的。所以輸入的品質非常重要，而剛好你的程式碼庫就是最大的輸入來源之一。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=192s" target="_blank" rel="noopener noreferrer">03:12</a> 因此，每當你在糾正 agent 時，請思考如何將它變成確定性檢查，而不是在 rules 或你的 AGENTS.md 裡多加一行，因為寫進程式碼裡的可重現性高得多，也能讓你更加信任它。我喜歡用的比喻是，你的程式碼庫有點像一座花園。過去程式碼一次只會有幾個 PR 送進來。我記得 2024 年去上班時，審查了我同事寫的那 3 個 PR。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=224s" target="_blank" rel="noopener noreferrer">03:44</a> 而今天，那個數字更像是 300 個。所以現在每位工程師都是由數百甚至數千個 agent 組成的團隊，程式碼湧入得如此迅速，幾乎就像是一條持續不斷的水流，甚至感覺很像有機的生命體。在這個比喻中，你的程式碼庫、你施加的約束條件、你設立的護欄，就是水泥地基，讓你的 agents 所寫的新程式碼圍繞著它生長，就像這張圖片中的建築物一樣。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=258s" target="_blank" rel="noopener noreferrer">04:18</a> 所以在許多方面，身為軟體工程師的工作有點變得像是在園藝。因為程式碼是 agent 最大的輸入，這意味著任何權宜之計（workaround）、反模式、棄用程式碼、技術債，現在都很可能會直接被下一個 agent 複製，因為它看起來就像是你程式碼庫中既有的模式。這就像你的花園裡長了一些雜草或害蟲，不知不覺中它們就蔓延得到處都是。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=293s" target="_blank" rel="noopener noreferrer">04:53</a> 所以你要盡可能讓你的程式碼庫保持純淨無暇，這樣 agents 才會總是複製好的東西。好，我們來看一些真實的範例。</p>
+<h2 id="sec-3">章節 3：Dune 與可強制執行的架構（05:00）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=300s" target="_blank" rel="noopener noreferrer">05:00</a> Dune 是我們為 Grok Bot 建立的客戶端框架，用來實踐這種有機架構的想法。技術上來說它其實沒有那麼有趣。你大概可以把 Dune 想成有點像 Electron 應用程式的 Next.js。但 Dune 有趣的地方在於它有許多約束和 lint 規則，我們將打造桌面應用程式學到的許多經驗教訓都編寫進去了。其中一個經驗教訓是：任何需要細微拿捏才能用好的東西，往往都會導致 slop。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=333s" target="_blank" rel="noopener noreferrer">05:33</a> 最經典的例子就是 React 裡的 useEffect，對吧？它有適用的使用情境，但經常被誤用。有些人開玩笑說你需要博士學位才能用好 useEffect。換句話說，它真的需要非常細微的拿捏才能用好。而 agents 並不擅長使用它。所以我們的解決方案就是直接在產品程式碼中禁用它，只允許在 Dune API 內部的少數地方使用。實際上，這個問題現在已經被徹底根除了，我們再也不需要在程式碼審查時去抓這個問題。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=370s" target="_blank" rel="noopener noreferrer">06:10</a> 我們使用的另一個有趣模式是透過目錄結構來提供脈絡。我們在 Cursor（這也是個 Electron 應用程式）上看到的一個反模式是，agents 常常會把主執行緒的程式碼匯入到渲染執行緒中，從而導致長任務與畫面卡頓。所以在 Grok Bot 和 Dune apps 中，我們把它做得非常依循慣例。我們有這兩個頂層目錄，名稱就叫做 electron-renderer 和 electron-main，它們之間的互相匯入會被我們的相依圖分析器與一些 lint 規則禁止。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=406s" target="_blank" rel="noopener noreferrer">06:46</a> 再說一次，這些都是很容易設定的簡單 lint 規則，但這意味著在程式碼審查時，我們又少了一件需要審查和思考的事情。</p>
+<h2 id="sec-4">章節 4：用 lint 規則取代註解（06:56）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=417s" target="_blank" rel="noopener noreferrer">06:57</a> 然後我看到的另一件更令人驚訝的事，是 agents 使用 Markdown 的方式。像是文件、程式碼註解、rules 或 skills，它們把這些地方當成寫下「自己為何不做正確事情」的藉口之處。或者不知道你們有沒有遇過，它們會對你做出的微小修正矯枉過正，把它當成永遠不可打破的硬性規則。這是 Cursor 的另一個例子。agents 非常喜歡使用命令式的計時器，像是 setTimeout、requestAnimationFrame、requestIdleCallback。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=452s" target="_blank" rel="noopener noreferrer">07:32</a> 它們把這些當成權宜之計，因為它們實際上是在掩蓋 VS Code 的命令式風格與 React 的宣告式風格之間的架構衝突。所以我們的架構選擇實際上讓客戶端和 agent 的效能都變差了許多。如果你曾經做過任何 JavaScript 的效能調校，你就會知道當有大量的計時器被快速建立又銷毀時，會引發大量的重大垃圾回收，進而造成嚴重的延遲與畫面卡頓。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=483s" target="_blank" rel="noopener noreferrer">08:03</a> 但最糟糕的部分是，agents 寫了大量的程式碼註解（就像你在這裡紅色標示處看到的），解釋為什麼這個權宜之計是合理的。不知不覺中，計時器蔓延得到處都是，應用程式的效能也受到了實質的損害。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=502s" target="_blank" rel="noopener noreferrer">08:22</a> 現在在 Grok Bot 中，我們學到了教訓，決定直接禁用 99% 的註解，因為它們很容易過期失準。反正人類本來就懶得去讀那些註解 slop。而且這再次給了 agent 一個後門藉口，以「因為很難」為由來合理化不做正確事情的行為。不過註解最糟糕的一點，是它們無法強制執行。所以看似出於好意（像是「我要告訴下一個 agent 不要這樣做」），最終卻從來不是真正能讓你信任的東西。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=534s" target="_blank" rel="noopener noreferrer">08:54</a> 所以在 Grok Bot 和 Dune 中，我們現在有 lint 規則可以提供良好 且非常有幫助的錯誤訊息，告訴 agent 要去修復根本原因、真正的問題，而不是只在周圍打補丁。因此我們的一般原則是，每次我們糾正 agents 時，都會轉化為這些確定性檢查之一，或者我們會思考如何透過更好的 API 設計、更好的架構，在程式碼中徹底根除該問題。如果你重複這樣做夠多次，你會發現程式碼審查時需要留意的東西就變少了。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=570s" target="_blank" rel="noopener noreferrer">09:30</a> 到了某個時間點，你會意識到已經沒有什麼需要審查的了。你就可以直接讓 agents 自行合併它們大部分的 PR。</p>
+<h2 id="sec-5">章節 5：執行期驗證與功能地圖（09:40）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=583s" target="_blank" rel="noopener noreferrer">09:43</a> 好的。接下來，驗證也是我們讓 agent 更加自主、同時提升我們對它們工作的信心與信任非常關鍵的一部分。我們的程式碼審查流程現在實際上已經縮減為改看驗證產物（verification artifacts）。像是影片、螢幕截圖、圖表、形式驗證。最基本的例子就是執行期驗證（runtime verification），這只是一種花俏的說法，意思是讓你的 agent 能夠親自執行程式碼，並使用除錯工具，就像人類開發者也會使用的工具一樣，例如 Chrome DevTools protocol。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=616s" target="_blank" rel="noopener noreferrer">10:16</a> 在我們的執行期驗證 skills 中，我們有一個叫做功能地圖（feature map）的東西。那基本上有點像是從使用者角度出發，列出應用程式中所有可用功能的網站地圖。有了這個，當你說「左側邊欄的那個小東西」時，agents 就不需要瞎猜，它為你們提供了一套共通詞彙。我們在這些 skills 內部也使用了客製化 CLI，讓 agents 每次都能重複使用該 CLI 和 driver，這減少了 token 消耗，同時也是可測試的。</p>
+<h2 id="sec-6">章節 6：形式驗證與 UI 測試（10:50）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=652s" target="_blank" rel="noopener noreferrer">10:52</a> 最近我們也開始著眼於形式驗證（formal verification）。我們現在使用 TLA+ 來對主要使用者流程進行模型檢驗，例如跨多裝置與多平台的通知流程。我們也使用 Lean 來證明特定演算法。例如，我們自己寫了一套客製化的虛擬化函式庫，我們在那裡使用 Lean 來檢查不會出現畫面閃爍或抖動的問題。整體而言，我們仍在對這種方法進行實驗。它看起來非常具有前景。透過形式驗證，我們已經找出了相當多的 bug。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=685s" target="_blank" rel="noopener noreferrer">11:25</a> 但這當然不是萬靈丹，我們把它當作 agent 環境中的另一個工具、另一個層次。雖然這段影片放得很快，但我們剛開始探索的另一件事，是針對 UI 進行屬性測試（property-based testing）。我們使用了一個叫做 Bombadil 的函式庫。這也已經幫我們抓到了幾個 UI bug。</p>
+<h2 id="sec-7">章節 7：把 token 花在驗證上（11:51）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=713s" target="_blank" rel="noopener noreferrer">11:53</a> 好，放大視野來看，我看到了 Cindy Sridharan 的這則推文，6 個月前她說—— 她當時提到因為合併進來的細微 bug，導致她無法信任自己的 agents。而對她來說，能夠信任 agents 所真正欠缺的，就是驗證流程。現在 6 個月過去了，她說她每天 70% 的 token 都花在驗證上。而我認為這也符合我的觀察，我大部分的 token 用量也都花在驗證上。如果你仔細審視她的流程，這裡的每一項技術都不是我們以前從未見過的新奇手法。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=750s" target="_blank" rel="noopener noreferrer">12:30</a> 這些都只是良好的軟體工程工具，只是過去因為難以理解、撰寫或維護，使用成本可能高得令人卻步。但 agents 大幅降低了這項成本。說真的，我們正在進入軟體測試與驗證的黃金時代，因為 agents 讓我們能夠對所有事物進行測試，其深入程度遠超越以往具備經濟效益的範疇。形式驗證也能幫助你更好地推導你的產品應該如何運作，以及你的 agents 是否真正理解你的意圖與目標。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=782s" target="_blank" rel="noopener noreferrer">13:02</a> 我在我的外掛 pstack 中製作了這個名為 statechart 的新 skill，它可以幫助你從使用者的角度將狀態機視覺化。我發現將這個搭配我們提供的影片和螢幕截圖一起審查，變得容易許多。所以效果很好。抱歉，白底投影片閃到大家了。好，現在我們來看看所謂的應許之地是什麼模樣。這一切的投資能為你換來什麼回報？</p>
+<h2 id="sec-8">章節 8：11,000 個 PR 與約 0.5% 的還原率（13:32）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=812s" target="_blank" rel="noopener noreferrer">13:32</a> 在 Grok Bot 團隊中，我們的開發速度正在起飛並迅速提升。上個月，我們團隊向正式環境交付了誇張的 11,000 個 PR，這是一個極其瘋狂的數字。我們發布客戶端的步調也加快了。我們大約每天都會發布一個新的穩定版。核心團隊交付的成果也多出許多。我們也有更多臨時或順手貢獻的外部人員（drive-by contributors），他們不一定掌握很多背景脈絡，但他們也都在進行貢獻。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=846s" target="_blank" rel="noopener noreferrer">14:06</a> 在 10 月，我們大約有 227 個人貢獻了至少一個 PR。隨著速度加快，你可能會心想：這難道不會變成一團混亂嗎？這難道不會變成一堆 slop 嗎？但事實上，被還原（revert）的 PR 數量在相對比例上反而變低了，穩定維持在約 0.5% 左右。但我認為關於這種交付速度和 PR 數量，真正有趣的是 Grok Bot 的效能不僅保持穩定，</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=880s" target="_blank" rel="noopener noreferrer">14:40</a> 而且相較於剛推出時，在多個維度上都有所提升。啟動、打字輸入、開啟新對話、切換對話，這一切都變快了。請記住，Grok Bot 目前仍然是一個 Electron 應用程式。所以它是有極限天花板的，對吧？但它已經比市面上許多其他的 agent UI 快上許多。對於一個擁有如此高速度且有這麼多人共同貢獻的 Electron 應用程式來說，我認為表現相當不錯。</p>
+<h2 id="sec-9">章節 9：先打好基礎，再蓋軟體工廠（15:11）</h2>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=911s" target="_blank" rel="noopener noreferrer">15:11</a> 因此，在你一頭栽進去打造軟體工廠（software factory）並盡可能把所有事情自動化之前，每當你糾正 agent 時，請嘗試先從改善你的程式碼庫（codebase）著手。先從建立一條 lint 規則來防止反模式再次發生開始，接著也清理掉那些舊模式。然後確保你的驗證機制非常健全。無論如何，這些工作大多都是走向自動化的先決條件。如果你的內圈寫程式迴圈（inner coding loop）產出的是 slop，那麼將該迴圈自動化只會產出更多的 slop，</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=942s" target="_blank" rel="noopener noreferrer">15:42</a> 而你將不得不向這個問題砸入越來越多的 token，而大家都知道那非常昂貴。而一旦你對你的程式碼庫（codebase）、靜態分析、執行期與形式驗證做出這些投入，你就會開始發現有了這些基礎後，很多事情都變得可能，而且你真的能在這些基礎之上輕鬆打造自己的工廠。而當你準備好時，Grok Bot 是打造那個外圈迴圈的絕佳方式。我們有大量的連接器和routines可以啟動 Cursor、雲端 agents 和專案，讓你能夠編排數百甚至數千個 agents。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=981s" target="_blank" rel="noopener noreferrer">16:21</a> 舉個簡單的例子，現在每當我們發布新版本時，Grok Bot 都會自動為我們啟動一個新的 Cursor 專案，對整個應用程式進行模糊測試（fuzz），測試整個建置（build），而且它會透過執行應用程式並像真實使用者一樣使用它來找出 bug。接著它會為找到的每個 bug 開立修復 PR，並且會自動合併，聽起來雖然很瘋狂但確實如此。這是因為我們的程式碼庫（codebase）夠優秀，PR 往往預設就品質良好，而且我們合進去的大多數產品程式碼，真的不再需要深入的人工審查。</p>
+<p><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=1017s" target="_blank" rel="noopener noreferrer">16:57</a> 所以當你擁有扎實的基礎和良好的有機架構時，你就能把 slop 點石成金，並且能夠高速交付，同時完全不對品質妥協。我是 poteto，大家也叫我 Lauren。再次感謝大家來聽我的演講。〔掌聲〕</p>
+</article></main>
+<footer>
+<p>本頁為非官方翻譯；英文為機器字幕，中文為 AI 翻譯，經 Opus 逐句閱讀，未經人工校稿、未逐句對照原音。影片與講者簡報版權屬原權利人。</p>
+<p>本案分析與撰稿由 AI 模型完成，封面與插圖為 AI 生成；視覺風格受講者簡報啟發，角色與構圖為原創。</p>
+<p>另見：<a href="read.html">完整導讀</a>、<a href="index.html">解說動畫</a>、<a href="player.html">播放器</a>。</p>
+</footer>
+</div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="圖片放大檢視"><button type="button" aria-label="關閉放大檢視">關閉（Esc）</button><img alt=""></div>
+<script>
+(function(){
+  var box=document.getElementById('lightbox'), big=box.querySelector('img'), btn=box.querySelector('button'), last=null;
+  function open(img){last=img;big.src=img.currentSrc||img.src;big.alt=img.alt;box.classList.add('is-open');btn.focus();}
+  function close(){box.classList.remove('is-open');big.removeAttribute('src');if(last){last.focus();}}
+  document.querySelectorAll('figure img').forEach(function(img){
+    img.addEventListener('click',function(){open(img);});
+    img.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open(img);}});
+  });
+  box.addEventListener('click',function(e){if(e.target===box||e.target===btn){close();}});
+  document.addEventListener('keydown',function(e){
+    if(!box.classList.contains('is-open'))return;
+    if(e.key==='Escape'){close();}
+    if(e.key==='Tab'){e.preventDefault();btn.focus();}
+  });
+})();
+</script>
+<script>
+/* Progressive enhancement only: the complete article exists without JavaScript. */
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  var scheme=matchMedia('(prefers-color-scheme: dark)');
+  var motion=matchMedia('(prefers-reduced-motion: reduce)');
+  var toggle=document.querySelector('.theme-toggle');
+  var saved=null;
+  try{saved=localStorage.getItem('lauren-garden-theme');}catch(e){}
+  if(saved==='light'||saved==='dark')root.dataset.theme=saved;
+  function isDark(){return root.dataset.theme?root.dataset.theme==='dark':scheme.matches;}
+  function label(){if(!toggle)return;toggle.textContent=isDark()?'淺色':'深色';toggle.setAttribute('aria-label','切換'+(isDark()?'淺色':'深色')+'模式');}
+  if(toggle){toggle.hidden=false;label();toggle.addEventListener('click',function(){root.dataset.theme=isDark()?'light':'dark';try{localStorage.setItem('lauren-garden-theme',root.dataset.theme);}catch(e){}label();update();});}
+  scheme.addEventListener('change',function(){label();update();});
+  var growth=document.querySelector('.growth-meter'),scheduled=false;
+  function update(){
+    scheduled=false;
+    if(!growth)return;
+    var total=root.scrollHeight-innerHeight;
+    var p=total>0?Math.max(0,Math.min(scrollY/total,1)):1;
+    if(motion.matches){root.style.removeProperty('--field');root.style.removeProperty('--growth');root.style.removeProperty('--ripe');return;}
+    root.style.setProperty('--growth',p.toFixed(4));
+    root.style.setProperty('--ripe',Math.max(0,Math.min((p-.92)/.08,1)).toFixed(4));
+    var from=isDark()?[36,52,41]:[231,239,218],to=isDark()?[59,53,35]:[250,232,184];
+    root.style.setProperty('--field','rgb('+from.map(function(v,i){return Math.round(v+(to[i]-v)*p);}).join(',')+')');
+  }
+  addEventListener('scroll',function(){if(!scheduled){scheduled=true;requestAnimationFrame(update);}},{passive:true});
+  addEventListener('resize',update);
+  motion.addEventListener('change',function(){
+    if(motion.matches){root.classList.remove('live');document.querySelectorAll('.rv').forEach(function(e){e.classList.add('is-in');});}
+    update();
+  });
+  update();
+  // Keep the core focus trap and focus restoration; lock background scrolling.
+  var box=document.querySelector('.lightbox');
+  if(box){new MutationObserver(function(){var open=box.classList.contains('is-open');document.body.style.overflowY=open?'hidden':'';}).observe(box,{attributes:true,attributeFilter:['class']});}
+})();
+
+</script>
+</body>
+</html>

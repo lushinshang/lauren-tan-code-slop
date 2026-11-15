@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%230f7b6c%27/%3E%3Cpath d=%27M12 46 26 30l8 8 18-22%27 stroke=%27white%27 stroke-width=%277%27 fill=%27none%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<title>把糾正寫成規則：poteto 怎麼讓 slop 變黃金</title>
+<meta name="description" content="Lauren Tan〈All Code Is Slop (Except Mine)〉導讀——當 agent 一天送來幾百個 PR，審查的位置往哪裡退">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:title" content="把糾正寫成規則：poteto 怎麼讓 slop 變黃金">
+<meta property="og:description" content="Lauren Tan〈All Code Is Slop (Except Mine)〉導讀——當 agent 一天送來幾百個 PR，審查的位置往哪裡退">
+<meta property="og:image" content="https://lushinshang.github.io/lauren-tan-code-slop/images/og-hero.jpg">
+<meta property="og:image:width" content="1120">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="原創 AI 插畫：奶油色溫室裡，園丁獺與小苗站在木籬笆旁，雜草逐漸轉為金色麥田。">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="把糾正寫成規則：poteto 怎麼讓 slop 變黃金">
+<meta name="twitter:description" content="Lauren Tan〈All Code Is Slop (Except Mine)〉導讀——當 agent 一天送來幾百個 PR，審查的位置往哪裡退">
+<meta name="twitter:image" content="https://lushinshang.github.io/lauren-tan-code-slop/images/og-hero.jpg">
+<meta property="og:url" content="https://lushinshang.github.io/lauren-tan-code-slop/read.html">
+<script>(function(){
+  var d=document.documentElement;
+  if(!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)&&'IntersectionObserver' in window){
+    d.className+=' live';
+    setTimeout(function(){if(!window.__scrolly){d.classList.remove('live');}},3000);
+  }
+})();</script>
+<style>
+:root{
+  --bg:#f9f7f4; --surface:#fffdf9; --ink:#1a1a1a; --muted:#5f5b54; --line:#e4dfd6;
+  --accent:#0f7b6c; --accent-ink:#0b5c51; --note:#f0ebe1; --code:#ece6d8; --link:#1f5f99;
+  --card:#fff6e8; --card-line:#e8c99a; --shadow:0 6px 24px rgba(40,30,10,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#1b1a18; --surface:#26241f; --ink:#ece8de; --muted:#aaa497; --line:#3a3730;
+    --accent:#4fc1ad; --accent-ink:#7fd6c6; --note:#2f2c25; --code:#33302a; --link:#8fbde8;
+    --card:#2d2820; --card-line:#5b4a30; --shadow:0 6px 24px rgba(0,0,0,.35);}
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;
+  font:17px/1.7 "Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;letter-spacing:0}
+.skip{position:absolute;left:-999px;top:0;background:var(--accent);color:#fff;padding:8px 14px;z-index:300}
+.skip:focus{left:8px;top:8px}
+nav.toc{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav.toc ul{list-style:none;margin:0 auto;padding:0 16px;max-width:1120px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none;
+  white-space:nowrap;-webkit-overflow-scrolling:touch;min-height:52px;align-items:center}
+nav.toc ul::-webkit-scrollbar{display:none}
+nav.toc a{display:inline-block;padding:8px 12px;border-radius:999px;color:var(--muted);text-decoration:none;font-size:14px;min-height:36px}
+nav.toc a:hover,nav.toc a:focus-visible{background:var(--note);color:var(--ink)}
+a{color:var(--link);overflow-wrap:anywhere}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.page{max-width:1120px;margin:0 auto;padding:0 20px 80px}
+header.hero{padding:56px 0 8px;text-align:center}
+.eyebrow{margin:0 0 8px;color:var(--accent-ink);font-weight:700;letter-spacing:0;font-size:14px}
+h1{margin:0 auto 14px;max-width:820px;font-size:clamp(1.7rem,1.2rem + 2vw,2.6rem);line-height:1.3;text-wrap:balance}
+.byline{margin:0 0 6px;color:var(--muted);font-size:14px}
+.video-link{margin:0 0 28px;font-size:14px}
+figure{margin:32px 0}
+figure img{display:block;width:100%;height:auto;aspect-ratio:var(--ar-d,16/9);object-fit:contain;border-radius:12px;
+  box-shadow:var(--shadow);background:var(--surface);cursor:zoom-in}
+@media (max-width:640px){figure picture img{aspect-ratio:var(--ar-m,9/16)}}
+@media (max-width:640px){figure.hero-figure picture img{max-width:300px;margin:0 auto}}
+figure.hero-figure{max-width:720px;margin-left:auto;margin-right:auto}
+hr{border:0;border-top:1px solid var(--line);margin:40px 0}
+p.figcap{margin:-18px auto 1.4em;text-align:center;font-size:14px;color:var(--muted)}
+figcaption{margin:10px auto 0;max-width:720px;font-size:14px;line-height:1.55;color:var(--muted);text-align:center}
+article{max-width:720px;margin:0 auto}
+article figure.section-figure{margin-left:50%;transform:translateX(-50%);width:min(860px,calc(100vw - 32px))}
+h2{margin:56px 0 12px;font-size:1.55rem;line-height:1.4;scroll-margin-top:72px;text-wrap:balance;
+  border-left:5px solid var(--accent);padding-left:14px;margin-left:-19px}
+h3{margin:36px 0 8px;font-size:1.2rem;line-height:1.45}
+p{margin:0 0 1.1em}
+ul,ol{margin:0 0 1.2em;padding-left:1.4em}
+li{margin:.35em 0}
+strong{font-weight:700}
+code{background:var(--code);padding:.1em .4em;border-radius:5px;font:0.9em ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
+section.summary-card{background:var(--card);border:1px solid var(--card-line);border-radius:14px;padding:6px 22px 10px;margin:24px 0 8px;box-shadow:var(--shadow)}
+section.summary-card h2{margin:14px 0 8px;font-size:1.2rem;border-left:0;padding-left:0;margin-left:0}
+section.summary-card p{margin:0 0 .8em;font-size:16.5px}
+ol.takeaways{padding-left:1.6em}
+ol.takeaways li{margin:.8em 0;padding-left:.2em}
+ol.takeaways li::marker{color:var(--accent-ink);font-weight:700}
+ul.sources li{overflow-wrap:anywhere}
+aside.note{background:var(--note);border-left:4px solid var(--accent);border-radius:8px;padding:12px 16px;margin:0 0 1.6em;font-size:15px;color:var(--ink)}
+aside.note p,aside.note ul{margin:0 0 .6em}
+aside.note ul{padding-left:1.3em}
+figure.diagram{margin:28px 0}
+.mermaid-scroll{overflow-x:auto;max-width:100%;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;-webkit-overflow-scrolling:touch}
+.mermaid-scroll pre{margin:0;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;color:var(--ink)}
+.mermaid-scroll svg{display:block;margin:0 auto;height:auto;max-width:100%}
+.table-scroll{overflow-x:auto;margin:0 0 1.6em;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.table-scroll table{border-collapse:collapse;width:100%;min-width:560px;font-size:15px;line-height:1.55}
+.table-scroll th,.table-scroll td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+.table-scroll th{background:var(--note);font-weight:700}
+.table-scroll tr:last-child td{border-bottom:0}
+.table-scroll td.k{font-weight:600;white-space:nowrap}
+.table-scroll td.nw{white-space:nowrap}
+.table-scroll.wide{margin-left:50%;transform:translateX(-50%);width:min(1040px,calc(100vw - 32px))}
+@media (max-width:640px){.table-scroll.wide{margin-left:0;transform:none;width:auto}}
+@media (max-width:640px){
+  .table-scroll{overflow-x:visible}
+  .table-scroll table{min-width:0}
+  .table-scroll thead{position:absolute;left:-9999px}
+  .table-scroll tr,.table-scroll td{display:block}
+  .table-scroll tr{padding:10px 12px;border-bottom:1px solid var(--line)}
+  .table-scroll tr:last-child{border-bottom:0}
+  .table-scroll td{padding:2px 0;border:0}
+  .table-scroll td.k{color:var(--accent-ink);white-space:normal}
+  .table-scroll td.nw{white-space:normal}
+  .table-scroll td::before{content:attr(data-label) "：";font-weight:700;color:var(--muted);font-size:13px}
+}
+
+p.lede{margin:0 auto 10px;max-width:760px;color:var(--muted);font-size:16px;line-height:1.65}
+footer{max-width:720px;margin:64px auto 0;padding-top:16px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+.lightbox{display:none;position:fixed;inset:0;z-index:200;background:rgba(20,18,14,.9);align-items:center;justify-content:center;padding:24px}
+.lightbox.is-open{display:flex}
+.lightbox img{max-width:96vw;max-height:90vh;width:auto;height:auto;border-radius:8px;box-shadow:0 12px 48px rgba(0,0,0,.5);background:#fff}
+.lightbox button{position:absolute;top:14px;right:14px;min-width:44px;min-height:44px;padding:8px 14px;border:0;border-radius:999px;
+  background:#fff;color:#222;font-size:15px;cursor:pointer}
+@media (max-width:760px){
+  h2{margin-left:0;border-left:0;padding-left:0;border-top:3px solid var(--accent);padding-top:10px}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .page{padding:0 16px 64px}
+  header.hero{padding-top:36px}
+  h2{font-size:1.35rem}
+  section.summary-card{padding:4px 16px 8px}
+}
+
+html{scroll-behavior:smooth}
+header.opening{min-height:86vh;min-height:86dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:56px 0 24px}
+header.opening h1{font-size:clamp(2rem,1.2rem + 3.4vw,3.6rem);max-width:900px}
+header.opening .intro{max-width:720px;width:100%;text-align:left}
+header.opening figure.hero-figure{width:100%}
+.cue{margin:28px 0 0;color:var(--muted);font-size:14px}
+.cue span{display:block;font-size:22px;line-height:1}
+section.scene{padding:9vh 0 6vh;max-width:760px;margin:0 auto;scroll-margin-top:12px}
+section.scene.layout-sticky{max-width:1040px}
+section.scene h2{margin-top:0}
+.scene-grid{display:block}
+section.layout-sticky .scene-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:start}
+section.layout-sticky .scene-media{position:sticky;top:12vh}
+section.layout-sticky .scene-media figure{margin:0}
+section.layout-sticky .step{margin-bottom:18vh}
+section.layout-sticky .step:last-child{margin-bottom:6vh}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:0 0 1.6em}
+.stat{background:var(--card);border:1px solid var(--card-line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.stat .num{display:block;font-size:2.4rem;line-height:1.15;font-weight:800;color:var(--accent-ink);font-variant-numeric:tabular-nums}
+.stat .lbl{display:block;margin-top:4px;color:var(--muted);font-size:14.5px;line-height:1.5}
+.progress{position:fixed;left:0;right:0;top:0;height:4px;background:var(--line);z-index:60}
+.progress i{display:block;height:100%;width:0;background:var(--accent)}
+nav.dots{position:fixed;right:14px;top:50%;transform:translateY(-50%);z-index:55}
+nav.dots ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+nav.dots a{display:block;width:26px;height:26px;position:relative}
+nav.dots a::after{content:"";position:absolute;inset:8px;border-radius:50%;background:var(--line);transition:background .2s,transform .2s}
+nav.dots a:hover::after,nav.dots a:focus-visible::after{background:var(--muted)}
+nav.dots a.is-active::after{background:var(--accent);transform:scale(1.5)}
+@media (max-width:1180px){nav.dots{display:none}}
+@media (max-width:860px){
+  section.layout-sticky .scene-grid{display:block}
+  section.layout-sticky .scene-media{position:static}
+  section.layout-sticky .step{margin-bottom:0}
+  section.scene{padding:7vh 0 4vh}
+}
+@media (prefers-reduced-motion:no-preference){
+  .live .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}
+  .live .rv.is-in{opacity:1;transform:none}
+  .live section.layout-sticky .step:not(.is-active){opacity:.62}
+  .live section.layout-sticky .step.is-active{opacity:1}
+  .cue span{animation:bob 1.8s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+@media print{.progress,nav.dots,.cue{display:none!important}.rv,.step{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* 溫室麥田。色彩只作呈現；正文、圖說與來源不依賴動態。 */
+:root,:root[data-theme="light"]{
+  color-scheme:light;--bg:#FFF7E6;--surface:#fffbf2;--ink:#2B2F3A;--muted:#5e6252;
+  --line:#c7c5aa;--accent:#5E8F5A;--accent-ink:#375e35;--link:#335c7b;
+  --note:#edf0de;--code:#e8e6d6;--card:#FFF7E6;--card-line:#b6a784;
+  --shadow:0 3px 0 #baa67533,0 16px 34px #4739160c;
+  --field-start:#e7efda;--field-end:#fae8b8;--field:var(--field-start);--harvest:0;
+  --focus:#91400e;--fence:#8d7653;--paper-ink:#2B2F3A;--paper-muted:#605d4e;
+}
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){color-scheme:dark;--bg:#1D2420;--surface:#27302a;--ink:#FFF7E6;--muted:#cecdb9;--line:#56644e;--accent:#a7c791;--accent-ink:#c4dda6;--link:#a8d7ef;--note:#303d30;--code:#354234;--field-start:#243429;--field-end:#3b3523;--focus:#f2bf63;--fence:#c6ad78;--shadow:0 3px 0 #0003,0 16px 34px #0002}
+}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#1D2420;--surface:#27302a;--ink:#FFF7E6;--muted:#cecdb9;--line:#56644e;--accent:#a7c791;--accent-ink:#c4dda6;--link:#a8d7ef;--note:#303d30;--code:#354234;--field-start:#243429;--field-end:#3b3523;--focus:#f2bf63;--fence:#c6ad78;--shadow:0 3px 0 #0003,0 16px 34px #0002}
+html{background:var(--bg);scroll-padding-top:28px}
+body.garden-page{background:var(--bg);color:var(--ink);font:17px/1.9 -apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC",sans-serif;overflow-x:clip;isolation:isolate}
+body.garden-read::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(90deg,var(--field),transparent 24%,transparent 76%,var(--field));opacity:.85}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+h1,h2,h3,.seed-packet,.garden-brand{font-family:ui-rounded,"PingFang TC","Noto Sans TC",sans-serif}
+h1,h2,h3{overflow-wrap:anywhere}
+button,input,select{font:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
+a{color:var(--link);text-underline-offset:.22em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--focus)!important;outline-offset:5px!important;border-radius:3px}
+.skip{background:var(--ink);color:var(--bg)}
+.garden-mast{max-width:1240px;margin:0 auto;padding:20px 44px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line);font-size:14px;min-height:84px}
+.garden-brand{color:var(--ink);font-size:19px;font-weight:800;text-decoration:none;white-space:nowrap}
+.garden-brand>span{font-size:28px;color:var(--accent-ink);vertical-align:middle;margin-right:8px}
+.garden-brand small{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.12em;margin-left:18px;font-weight:500}
+.garden-mast nav{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.garden-mast nav a{min-height:44px;display:inline-flex;align-items:center;text-decoration:none;color:var(--ink)}
+.garden-mast nav a[aria-current]{text-decoration:underline;text-decoration-color:var(--accent-ink);text-decoration-thickness:2px}
+.theme-toggle{min-height:44px;min-width:64px;padding:5px 14px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:24px;cursor:pointer;font-size:14px}
+.theme-toggle:hover{background:var(--note)}
+.page{max-width:1200px;padding:0 48px 80px;margin:auto}
+header.opening{min-height:0;padding:62px 0 76px;position:relative}
+header.opening .eyebrow{font-size:13px;color:var(--accent-ink);letter-spacing:.24em;border:1px solid var(--line);border-radius:4px;padding:4px 15px;margin-bottom:24px}
+header.opening h1{font-size:clamp(2.1rem,4.7vw,4.1rem);line-height:1.22;letter-spacing:-.045em;max-width:970px;margin:0 auto 22px;text-wrap:balance;font-weight:850}
+header.opening .lede{max-width:740px;font-size:18px;line-height:1.8;color:var(--muted);margin-bottom:18px}
+.byline{font-size:13px;color:var(--muted)}
+header.opening figure.hero-figure{width:100%;max-width:none;margin:36px 0 0;position:relative}
+figure.hero-figure img{border:1px solid var(--card-line);border-radius:100px 100px 8px 8px;background:#FFF7E6;box-shadow:var(--shadow);width:100%;max-width:none}
+figcaption{line-height:1.8;font-size:14px;text-align:left;max-width:none;color:var(--paper-muted);padding:13px 16px 3px;margin:0}
+figure.hero-figure figcaption{color:var(--muted);padding:12px 0;text-align:center}
+header.opening .intro{max-width:680px;font-size:17px;line-height:1.95}
+.garden-friends{display:flex;align-items:center;justify-content:center;gap:8px;margin:25px auto 24px;color:var(--muted);font-size:14px}
+.garden-friends svg{width:145px;height:118px;overflow:visible}
+.garden-friends span{writing-mode:vertical-rl;letter-spacing:.13em}
+.blink-eye{transform-box:fill-box;transform-origin:center}
+@media(prefers-reduced-motion:no-preference){.garden-friends:hover .blink-eye{animation:blink .8s ease-in-out}@keyframes blink{0%,38%,70%,100%{transform:scaleY(1)}45%,57%{transform:scaleY(.08)}}}
+aside.note{border-left:3px solid var(--accent);border-radius:2px 16px 16px 2px;padding:18px 22px;background:var(--note);font-size:15px;line-height:1.85;color:var(--ink)}
+.cue{font-size:12px;letter-spacing:.18em;color:var(--muted);margin-top:25px}
+.cue span{animation:none!important;font-size:20px;margin-top:8px}
+section.scene{max-width:680px;padding:74px 0 68px;position:relative;scroll-margin-top:24px}
+section.scene::before{content:"";display:block;position:absolute;top:0;left:0;right:0;height:20px;opacity:.65;background:repeating-linear-gradient(90deg,transparent 0 26px,var(--fence) 26px 29px,transparent 29px 58px),linear-gradient(transparent 5px,var(--fence) 5px 7px,transparent 7px 13px,var(--fence) 13px 15px,transparent 15px);border-radius:3px}
+section.scene.layout-sticky{max-width:1104px}
+section.scene h2{border:0;margin:0 0 34px;padding:0;font-size:clamp(1.7rem,2.5vw,2.4rem);line-height:1.5;letter-spacing:-.025em;max-width:760px;text-wrap:pretty}
+section.scene h3{font-size:1.2rem;margin-top:32px}
+.seed-packet{display:inline-flex;flex-wrap:wrap;gap:4px 16px;align-items:center;max-width:100%;padding:10px 18px;margin-bottom:22px;color:#473c28;background:#f6e5ba;border:1px solid #ac976a;border-top:5px double #ac976a;border-radius:3px 3px 12px 3px;box-shadow:2px 3px 0 #8d765313;font-size:12px;line-height:1.8;letter-spacing:.04em}
+.seed-packet span:first-child{font-weight:800;font-size:13px}
+section.layout-sticky .scene-grid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:48px}
+section.layout-sticky .scene-media{top:12vh}
+section.layout-sticky .step{margin-bottom:11vh}
+section.layout-sticky .step:last-child{margin-bottom:3vh}
+/* 非作用中的步驟亦保持完整對比，動畫只控制首次揭露。 */
+.live section.layout-sticky .step:not(.is-active){opacity:1}
+.scene-flow p,.scene-flow li,.scene-steps p,.scene-steps li{max-width:40em;overflow-wrap:anywhere}
+figure.section-figure{background:#FFF7E6;color:#2B2F3A;border:1px solid #c9b88e;border-radius:9px;padding:10px 10px 16px;margin:34px 0;box-shadow:var(--shadow)}
+figure.section-figure img{background:#FFF7E6;border-radius:4px;box-shadow:none}
+figure.section-figure figcaption a{color:#335c7b}
+.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:28px}
+.stat{background:#FFF7E6;color:#2B2F3A;border:1.5px solid #b4a17a;border-radius:3px 14px 5px 8px;padding:18px 16px;box-shadow:3px 4px 0 #b9a16b24;position:relative;min-width:0}
+.stat::before{content:"";display:block;width:30px;height:5px;background:#E8B923;margin-bottom:18px;border-radius:4px;transform:rotate(-4deg)}
+.stat:nth-child(2)::before{background:#5E8F5A}.stat:nth-child(3)::before{background:#F08A3C}.stat:nth-child(4)::before{background:#5DAEE0}
+.stat .num{font-family:"Chalkboard SE","Comic Sans MS",ui-rounded,"PingFang TC",sans-serif;font-size:clamp(2rem,3vw,2.75rem);color:#2B2F3A;font-weight:700;letter-spacing:-.04em;white-space:nowrap}
+.stat .lbl{font-size:13px;line-height:1.9;color:#605d4e;margin-top:12px}
+.tier{display:inline-block;vertical-align:.08em;padding:1px 6px;white-space:nowrap;margin:0 3px;border:1px solid currentColor;border-radius:4px;font-size:11px;font-weight:650;line-height:1.65;letter-spacing:.03em}
+.t-primary{color:#2c522c;background:#e2ecd5}.t-screen{color:#294d67;background:#dbedf4}.t-speaker{color:#753d15;background:#fce1be}.t-secondary{color:#80322f;background:#f8ded4}.t-inference{color:#66501a;background:#f7edbc}
+a[href*="t="]{padding:1px 3px;border-radius:4px;white-space:nowrap;position:relative}
+a[href*="t="]::before{content:"";display:inline-block;width:0;height:9px;opacity:0;background:currentColor;clip-path:polygon(0 0,100% 50%,0 100%);transition:width .15s,opacity .15s}
+a[href*="t="]:hover::before,a[href*="t="]:focus-visible::before{width:8px;margin-right:4px;opacity:1}
+.table-scroll{border-color:var(--line);border-radius:6px}
+.table-scroll table{line-height:1.85}
+.table-scroll th,.table-scroll td{padding:14px 16px}
+.table-scroll.wide{width:100%;margin-left:0;transform:none}
+.pagefoot{max-width:680px;line-height:1.85;border-top:1px solid var(--line);margin:55px auto 0;padding:28px 0;color:var(--muted);font-size:14px}
+/* 保留內建進度數值，顯示介面由小苗承接。 */
+.progress{width:0;height:0;overflow:hidden;inset:0 auto auto 0;background:none}
+.growth-meter{position:fixed;left:18px;bottom:22px;width:48px;z-index:40;pointer-events:none;color:var(--muted)}
+.growth-meter svg{width:48px;height:150px;overflow:visible;stroke:#456d3c;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.growth-meter .soil{stroke:var(--fence)}
+.growing{transform-origin:32px 164px;transform:scaleY(calc(.22 + var(--growth,0)*.78))}
+.leaf{fill:#92b66e}.wheat{fill:#E8B923;stroke:#755c21;opacity:var(--ripe,0)}
+.growth-meter span{font-size:10px;writing-mode:vertical-rl;position:absolute;bottom:20px;left:-4px;letter-spacing:.12em}
+nav.dots{right:18px}
+nav.dots ol{gap:0}
+nav.dots a{width:32px;height:32px}
+nav.dots a::before{content:"";position:absolute;left:15px;top:6px;height:22px;width:1px;background:var(--fence);transform:rotate(20deg)}
+nav.dots a::after{inset:7px 10px 11px 14px;width:8px;height:12px;border-radius:80% 0 80% 0;background:var(--muted);transform:rotate(20deg);box-shadow:-7px 5px 0 -1px var(--muted)}
+nav.dots a.is-active::after{background:var(--accent-ink);box-shadow:-7px 5px 0 -1px var(--accent-ink);transform:rotate(20deg) scale(1.2)}
+nav.dots a:hover::after{background:var(--accent-ink)}
+.lightbox{padding:70px 16px 24px;background:#151b17f5}
+.lightbox img{background:#FFF7E6;max-height:calc(100dvh - 100px);max-width:96vw}
+.lightbox button{background:#FFF7E6;color:#2B2F3A;border:1px solid #a28d61;font-size:14px;line-height:1.5}
+/* 播放器與全文譯文沿用相同色票與頁首。 */
+.garden-translation header.hero,.garden-player header.hero{padding:52px 0 26px}
+.garden-translation h1,.garden-player h1{font-size:clamp(1.8rem,3vw,2.8rem);line-height:1.4}
+.garden-translation article{max-width:680px}
+.garden-translation article h2{border-left:0;margin-left:0;padding:28px 0 0;border-top:2px solid var(--fence);line-height:1.6}
+.garden-translation nav.toc{background:var(--bg)}
+.garden-player .page{max-width:1120px}
+.garden-player .note{background:var(--note);color:var(--ink);border-color:var(--line);line-height:1.9}
+.garden-player .bar button,.garden-player .bar select{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.garden-player #list li.on button,.garden-player .yt-fallback{background:var(--note);color:var(--ink)}
+@media(max-width:1180px){.growth-meter{left:10px;width:32px}.growth-meter svg{width:32px}.growth-meter span{display:none}.garden-mast{padding-left:32px;padding-right:32px}}
+@media(max-width:860px){
+  .page{padding:0 28px 55px}.garden-brand small{display:none}
+  header.opening{padding-top:42px;padding-bottom:60px}header.opening h1{font-size:clamp(2rem,6vw,3rem)}
+  section.layout-sticky .scene-grid{display:block}section.layout-sticky .scene-media{position:static}
+  section.layout-sticky .step{margin-bottom:0}section.layout-sticky .step:last-child{margin-bottom:0}
+  section.layout-sticky .scene-media figure{margin:0 0 30px}
+  section.scene{padding:60px 0 46px}section.scene.layout-sticky{max-width:680px}
+}
+@media(max-width:640px){
+  body.garden-page{font-size:16px;line-height:1.9}.page{padding:0 24px 48px}
+  .garden-mast{padding:14px 24px;gap:7px;flex-direction:column;align-items:flex-start;min-height:110px}
+  .garden-brand{font-size:18px}.garden-mast nav{width:100%;justify-content:space-between;gap:12px;font-size:13px}.theme-toggle{min-width:60px;font-size:13px}
+  header.opening{padding:35px 0 50px}header.opening h1{font-size:34px;line-height:1.35;letter-spacing:-.04em;margin-bottom:18px;text-wrap:pretty}
+  header.opening .eyebrow{margin-bottom:18px;font-size:12px}header.opening .lede{font-size:16px;text-align:left;line-height:1.9}
+  .byline{font-size:12px}header.opening figure.hero-figure{margin-top:24px}
+  figure.hero-figure picture img{max-width:none;border-radius:70px 70px 6px 6px}
+  header.opening .intro{font-size:16px;line-height:1.9}.garden-friends{margin:12px auto 20px}
+  section.scene h2{font-size:26px;line-height:1.55;margin-bottom:24px}.seed-packet{padding:8px 12px;margin-bottom:20px;font-size:11px}
+  figure.section-figure{padding:7px 7px 12px;margin:28px 0}figcaption{font-size:13px;padding:12px 8px 0}
+  .stats{gap:12px}.stat{padding:14px 11px}.stat .num{font-size:32px}.stat .lbl{font-size:12px}.stat::before{margin-bottom:12px}
+  .growth-meter{left:2px;bottom:10px;width:18px}.growth-meter svg{width:18px;height:85px}
+  aside.note{padding:15px 16px;font-size:14px}.pagefoot{font-size:13px}
+  .table-scroll td{padding:6px 0}.table-scroll tr{padding:12px 14px}
+  .garden-player .page{padding:0 16px 40px}.garden-player .bar{gap:10px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto!important}*,*::before,*::after{animation:none!important;transition:none!important}
+  body.garden-read::before{background:linear-gradient(90deg,var(--field-start),transparent 25%,transparent 75%,var(--field-start))}
+  .rv,.live .rv,.step{opacity:1!important;transform:none!important}
+  .growing{transform:none}.wheat{opacity:1}.blink-eye{transform:none!important}
+}
+@media print{.garden-mast,.growth-meter,.garden-friends,.cue,nav.dots{display:none!important}body.garden-read::before{display:none}.page{padding:0}section.scene{padding:24px 0}section.scene::before{display:none}section.layout-sticky .scene-grid{display:block}section.layout-sticky .scene-media{position:static}section.layout-sticky .step{margin-bottom:0}.rv{opacity:1!important;transform:none!important}}
+</style>
+<meta name="color-scheme" content="light dark">
+</head>
+<body class="garden-page garden-read">
+<div class="garden-mast"><a class="garden-brand" href="read.html" aria-label="溫室麥田：Lauren Tan 導讀"><span aria-hidden="true">✳</span> 溫室麥田 <small>LAUREN TAN · 導讀</small></a><nav aria-label="閱讀方式"><a href="read.html" aria-current="page">長文</a><a href="player.html">播放器</a><a href="translation-zh.html">譯文</a><button class="theme-toggle" type="button" aria-label="切換深色模式" hidden>深色</button></nav></div>
+<a class="skip" href="#main">跳到正文</a>
+<div class="progress" aria-hidden="true"><i></i></div><div class="growth-meter" aria-hidden="true"><svg viewBox="0 0 64 180" focusable="false"><path class="soil" d="M8 165 Q32 159 56 165"/><g class="growing"><path class="stem" d="M32 162 Q27 116 32 30"/><path class="leaf" d="M31 127 Q3 128 8 101 Q32 102 31 127 M31 102 Q59 102 56 76 Q31 78 31 102"/><g class="wheat"><path d="M32 64 Q9 53 16 39 Q33 44 32 64 M32 47 Q10 35 20 23 Q34 30 32 47 M32 64 Q55 53 48 39 Q31 44 32 64 M32 47 Q54 35 44 23 Q30 30 32 47 M32 32 Q21 15 32 5 Q43 15 32 32"/></g></g></svg><span>閱讀生長中</span></div>
+<nav class="dots" aria-label="場景導覽"><ol><li><a href="#scene-1" aria-label="第 1 場：先看全貌：把糾正留在環境裡，才接得住增加的產量" title="先看全貌：把糾正留在環境裡，才接得住增加的產量"></a></li><li><a href="#scene-2" aria-label="第 2 場：產量放大之後，工程師仍得守住品質" title="產量放大之後，工程師仍得守住品質"></a></li><li><a href="#scene-3" aria-label="第 3 場：信任要從程式碼庫養起，壞模式也會跟著長大" title="信任要從程式碼庫養起，壞模式也會跟著長大"></a></li><li><a href="#scene-4" aria-label="第 4 場：Dune 把容易走錯的路，直接擋在架構裡" title="Dune 把容易走錯的路，直接擋在架構裡"></a></li><li><a href="#scene-5" aria-label="第 5 場：把註解換成會擋錯的規則，糾正才會留下來" title="把註解換成會擋錯的規則，糾正才會留下來"></a></li><li><a href="#scene-6" aria-label="第 6 場：讓 agent 實際操作程式，審查就有成果可看" title="讓 agent 實際操作程式，審查就有成果可看"></a></li><li><a href="#scene-7" aria-label="第 7 場：形式驗證讓狀態與演算法多一層檢查" title="形式驗證讓狀態與演算法多一層檢查"></a></li><li><a href="#scene-8" aria-label="第 8 場：token 大多花在驗證，才有條件相信產生的程式碼" title="token 大多花在驗證，才有條件相信產生的程式碼"></a></li><li><a href="#scene-9" aria-label="第 9 場：PR 增加時，她也把發布節奏與還原率攤開來看" title="PR 增加時，她也把發布節奏與還原率攤開來看"></a></li><li><a href="#scene-10" aria-label="第 10 場：先讓內圈可靠，再替它接上自動觸發" title="先讓內圈可靠，再替它接上自動觸發"></a></li><li><a href="#scene-11" aria-label="第 11 場：數字背後：統計口徑與公開佐證決定能讀到哪裡" title="數字背後：統計口徑與公開佐證決定能讀到哪裡"></a></li><li><a href="#scene-12" aria-label="第 12 場：可以帶走的做法：下次糾正時，多留下一道檢查" title="可以帶走的做法：下次糾正時，多留下一道檢查"></a></li><li><a href="#scene-13" aria-label="第 13 場：製作說明：這篇導讀由 AI 模型完成" title="製作說明：這篇導讀由 AI 模型完成"></a></li><li><a href="#scene-14" aria-label="第 14 場：來源清單" title="來源清單"></a></li></ol></nav>
+<div class="page">
+<header class="opening">
+<p class="eyebrow">導讀長文</p>
+<h1>把糾正寫成規則：poteto 怎麼讓 slop 變黃金</h1>
+<p class="lede">Lauren Tan〈All Code Is Slop (Except Mine)〉導讀——當 agent 一天送來幾百個 PR，審查的位置往哪裡退</p>
+<p class="byline">整理：2026-11-15　資料截至 2026-11-15</p>
+<figure class="hero-figure"><picture><source media="(max-width: 640px)" srcset="images/hero-9x16.webp"><img src="images/hero-16x9.webp" alt="AI 生成的 16:9 封面：溫室裡的園丁獺與小苗站在圍籬旁，左側雜草叢生，右側長出金色麥穗。" width="1672" height="941" loading="eager" style="--ar-d:1672/941;--ar-m:941/1672" tabindex="0" role="button" aria-label="放大圖片：AI 生成的 16:9 封面：溫室裡的園丁獺與小苗站在圍籬旁，左側雜草叢生，右側長出金色麥穗。"></picture><figcaption>圖：以花園比喻程式碼庫的原創 AI 插畫。</figcaption></figure><div class="garden-friends" aria-hidden="true"><svg viewBox="0 0 210 170" focusable="false"><g transform="translate(67 100) scale(0.66)"><path d="M 39 48 Q 74 42 62 69 Q 48 81 31 65" fill="#9A7B5B" stroke="#2B2F3A" stroke-width="3" /><path d="M -39 26 Q -48 70 -25 79 Q 0 89 29 78 Q 49 65 38 25 Q 22 4 0 8 Q -25 7 -39 26 Z" fill="#9A7B5B" stroke="#2B2F3A" stroke-width="3" /><path d="M -28 34 Q -32 70 0 76 Q 32 70 29 34 Q 0 19 -28 34 Z" fill="#F2DEC0" stroke="#2B2F3A" stroke-width="2" /><path d="M -24 29 L -28 68 Q 0 78 28 68 L 24 29 M -24 29 Q 0 40 24 29" fill="#D7E2BE" stroke="#2B2F3A" stroke-width="2.5" /><rect x="-12" y="47" width="24" height="14" rx="4" fill="#FFF7E6" stroke="#2B2F3A" stroke-width="2" /><path d="M -27 77 Q -48 77 -39 86 L -15 86 M 27 77 Q 48 77 39 86 L 15 86" fill="#9A7B5B" stroke="#2B2F3A" stroke-width="3" /><circle cx="-37" cy="-38" r="12" fill="#9A7B5B" stroke="#2B2F3A" stroke-width="3"/><circle cx="37" cy="-38" r="12" fill="#9A7B5B" stroke="#2B2F3A" stroke-width="3"/><path d="M -42 -26 Q -46 -64 0 -65 Q 45 -64 43 -26 Q 43 11 0 19 Q -43 12 -42 -26 Z" fill="#9A7B5B" stroke="#2B2F3A" stroke-width="3" /><path d="M -28 -12 Q -25 -29 0 -17 Q 26 -29 29 -12 Q 30 10 0 11 Q -30 10 -28 -12 Z" fill="#F2DEC0" stroke="none" stroke-width="3" /><circle cx="-16" cy="-27" r="6" fill="#2B2F3A" stroke="none" stroke-width="3" class="blink-eye"/><circle cx="-17.6" cy="-29" r="1.8" fill="#FFF7E6" stroke="none" stroke-width="3"/><circle cx="16" cy="-27" r="6" fill="#2B2F3A" stroke="none" stroke-width="3" class="blink-eye"/><circle cx="14.4" cy="-29" r="1.8" fill="#FFF7E6" stroke="none" stroke-width="3"/><circle cx="-30" cy="-10" r="6" fill="#E8A594" stroke="none" stroke-width="3"/><circle cx="30" cy="-10" r="6" fill="#E8A594" stroke="none" stroke-width="3"/><path d="M -5 -12 Q 0 -16 5 -12 L 0 -7 Z" fill="#2B2F3A" stroke="#2B2F3A" stroke-width="1" /><path d="M -22 -7 l -10 -3 M -22 -2 l -10 2 M 22 -7 l 10 -3 M 22 -2 l 10 2" fill="none" stroke="#2B2F3A" stroke-width="1.5" /><path d="M -8 0 Q 0 6 8 0" fill="none" stroke="#2B2F3A" stroke-width="2.5" /><path d="M -41 -54 Q -38 -87 0 -88 Q 38 -87 41 -54 Z" fill="#F08A3C" stroke="#2B2F3A" stroke-width="3" /><rect x="-48" y="-58" width="96" height="12" rx="6" fill="#F08A3C" stroke="#2B2F3A" stroke-width="3" /><path d="M 0 -83 L 0 -63" fill="none" stroke="#2B2F3A" stroke-width="2.5" /><path d="M -37 29 Q -53 36 -31 49 M 37 29 Q 49 39 29 48" fill="#9A7B5B" stroke="#2B2F3A" stroke-width="3" /></g><g transform="translate(155 151) scale(0.72)"><g transform=""><path d="M -19 -13 Q -26 -35 -8 -48 Q 1 -53 10 -46 Q 30 -30 20 -11 Q 12 1 0 -2 Q -14 3 -19 -13 Z" fill="#5E8F5A" stroke="#2B2F3A" stroke-width="3" /><path d="M -1 -49 Q -30 -79 -30 -51 Q -20 -40 -1 -49 M 1 -49 Q 30 -79 30 -51 Q 20 -40 1 -49" fill="#5E8F5A" stroke="#2B2F3A" stroke-width="3" /><path d="M -12 -1 L -16 3 M 12 -1 L 16 3" fill="none" stroke="#2B2F3A" stroke-width="3" /><circle cx="-7" cy="-27" r="3" fill="#2B2F3A" stroke="none" stroke-width="3" class="blink-eye"/><circle cx="8" cy="-27" r="3" fill="#2B2F3A" stroke="none" stroke-width="3" class="blink-eye"/><path d="M -3 -18 Q 1 -14 5 -18" fill="none" stroke="#2B2F3A" stroke-width="2" /></g></g></svg><span>把糾正留在土壤裡。</span></div><div class="intro">
+<div class="rv"><aside class="note"><p>本導讀的分析與撰稿由 AI 模型完成，不是人類分析，也沒有經過人工逐句校稿。</p></aside></div>
+
+<div class="rv"><p>Lauren Tan 想說服聽眾，slop（低品質雜訊程式碼）可以變成黃金。她把工程師的工作放在產量增加之後：當 agent 不斷送來程式碼，如何維持甚至改善品質？她的回答是，每次糾正都要留下能執行的檢查，逐步把信任建立在 agent 工作的環境裡。</p></div>
+<div class="rv"><p>這支影片由 AI Engineer 頻道於 2026-11-14 上傳；影片版面標示 AI Engineer Code Summit，以及 Lauren Tan／Principal Engineer／SpaceX；開場投影片則寫著「Grok Bot @ SpaceXSI」<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>。本文依這些來源交代身分，未將影片認定為公司官方影片。</p></div>
+<div class="rv"><p>影片用語、統計口徑與公開資料之間有哪些出入，哪些做法尚缺公開佐證，集中在〈數字背後〉一場處理。</p></div>
+<div class="rv"><p>標籤說明：<span class="tier t-primary" title="repo 或官方頁可直接查到">一手</span>為原始 repo 或官方頁；<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>為投影片資訊；<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>為口述自述；<span class="tier t-secondary" title="媒體轉述，未見官方原文">二手</span>為他人轉述；<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>為本文歸納。</p></div>
+</div>
+<p class="cue" aria-hidden="true">往下捲動<span>↓</span></p>
+</header>
+<main id="main">
+<section class="scene layout-sticky" id="scene-1" aria-labelledby="sc1-h1" data-title="先看全貌：把糾正留在環境裡，才接得住增加的產量">
+<div class="seed-packet"><span>場次 01</span><span>閱讀全貌</span></div><div class="rv"><h2 id="sc1-h1">先看全貌：把糾正留在環境裡，才接得住增加的產量</h2></div>
+<div class="scene-grid"><div class="scene-media rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-pyramid-zh-mobile.svg"><img src="images/fig-pyramid-zh.svg" alt="信任倒金字塔的 5 層，由上而下為程式碼庫、靜態分析、驗證、散文與人工審查，左側成本箭頭向下。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/620" tabindex="0" role="button" aria-label="放大圖片：信任倒金字塔的 5 層，由上而下為程式碼庫、靜態分析、驗證、散文與人工審查，左側成本箭頭向下。"></picture><figcaption>圖：依講者投影片重繪的投入順序，成本箭頭朝向人工審查（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div><div class="scene-steps"><div class="step rv"><p>上個月個人上線 3,127 個 PR<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>，是 Lauren 開場拿出的成果。到了這個量，工程師還能逐份追著改嗎？她把問題往前移：先讓 agent 身處的程式碼庫更容易產生好程式碼，再讓它能驗證自己的成果（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=44s" target="_blank" rel="noopener noreferrer">0:44</a>）。</p></div>
+<div class="step"><div class="stats"><div class="stat rv" role="group" aria-label="3,127 個人 10 月 PR〔畫面〕"><span class="num" data-target="3127" data-dec="0" data-comma="1" data-prefix="" data-suffix="" data-final="3,127">3,127</span><span class="lbl">個人 10 月 PR<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span></span></div><div class="stat rv" role="group" aria-label="10,926 團隊 10 月合併 PR〔畫面〕"><span class="num" data-target="10926" data-dec="0" data-comma="1" data-prefix="" data-suffix="" data-final="10,926">10,926</span><span class="lbl">團隊 10 月合併 PR<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span></span></div><div class="stat rv" role="group" aria-label="23,370 團隊 6–10 月合計 PR〔畫面〕"><span class="num" data-target="23370" data-dec="0" data-comma="1" data-prefix="" data-suffix="" data-final="23,370">23,370</span><span class="lbl">團隊 6–10 月合計 PR<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span></span></div><div class="stat rv" role="group" aria-label="0.47% 10 月還原率，commits〔畫面〕"><span class="num" data-target="0.47" data-dec="2" data-comma="0" data-prefix="" data-suffix="%" data-final="0.47%">0.47%</span><span class="lbl">10 月還原率，commits<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span></span></div></div></div>
+<div class="step rv"><p>這座倒金字塔把程式碼庫放在最寬處，接著是靜態分析、驗證、自然語言規則，人工審查在尖端（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=125s" target="_blank" rel="noopener noreferrer">2:05</a>）。全文可帶著三個動作往下讀：先用架構封住常犯錯的路，再把糾正變成檢查，最後讓驗證產物承接審查<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>。</p></div></div></div>
+</section>
+<section class="scene layout-stack" id="scene-2" aria-labelledby="sc2-h1" data-title="產量放大之後，工程師仍得守住品質">
+<div class="seed-packet"><span>場次 02</span><span>影片第 1 章 · 0:00–2:03</span></div><div class="rv"><h2 id="sc2-h1">產量放大之後，工程師仍得守住品質</h2></div>
+<div class="scene-flow"><div class="rv"><p>影片第 1 章，0:00–2:03。Lauren 拿嫌棄別人程式碼是 slop 的心態開玩笑，隨即把題目拉回自己的工作。她回憶，以前公司會把極高產的工程師稱為 coding machine；她轉述 Bret Taylor 一個週末重寫 Google Maps 的軼事<span class="tier t-secondary" title="媒體轉述，未見官方原文">二手</span>，用來襯托 agent 讓更多人有機會成為「寫程式機器」（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=58s" target="_blank" rel="noopener noreferrer">0:58</a>）。</p></div>
+<div class="rv"><p>產量門檻變了，工程師的責任還在。她的主張是「在大幅提升生產力的同時，找出如何維持甚至改善程式碼品質的方法」（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=73s" target="_blank" rel="noopener noreferrer">1:13</a>）。有人稱這種工作方式為 software factory，她則從信任談起：要投入時間改善 agent 的環境，才有理由相信它會做對。</p></div>
+<div class="rv"><p>這份信任有養成過程。她自述花了六個月<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>，才走到能交付數千個 PR、其中許多在睡覺時完成的狀態（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=100s" target="_blank" rel="noopener noreferrer">1:40</a>）。她認為這條路走得通，聽眾也有機會少走些彎路；接下來的經驗，就是她為這份信任付出的工作。</p></div></div>
+</section>
+<section class="scene layout-stack" id="scene-3" aria-labelledby="sc3-h1" data-title="信任要從程式碼庫養起，壞模式也會跟著長大">
+<div class="seed-packet"><span>場次 03</span><span>影片第 2 章 · 2:03–5:00</span></div><div class="rv"><h2 id="sc3-h1">信任要從程式碼庫養起，壞模式也會跟著長大</h2></div>
+<div class="scene-flow"><div class="rv"><p>影片第 2 章，2:03–5:00。Lauren 把前兩層稱為確定性的約束：API、架構與重構決定能怎麼寫，lint、型別、編譯器與測試限制哪些寫法能留下。再疊上執行期與形式驗證，檢查系統屬性及 agent 是否理解意圖；需要判斷的部分，才交給 rules、skills、AGENTS.md（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=129s" target="_blank" rel="noopener noreferrer">2:09</a>）。</p></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-trust-zh-mobile.svg"><img src="images/fig-trust-zh.svg" alt="信任曲線以 agent 數量為橫軸，從 1、1 到 5、5 到 10、10 到 20，延伸至數百與數千，曲線上升後趨緩。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/560" tabindex="0" role="button" aria-label="放大圖片：信任曲線以 agent 數量為橫軸，從 1、1 到 5、5 到 10、10 到 20，延伸至數百與數千，曲線上升後趨緩。"></picture><figcaption>圖：講者用來引入信任問題的示意曲線，沒有信任度測量值（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div>
+<div class="rv"><p>她回憶 2024 年上班時審同事的 3 個 PR，如今更像是 300 個<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>。她用花園比喻程式碼庫：新程式碼長得愈快，架構與約束這些地基愈重要。投影片的「code is memory」點出原因：既有程式碼是 agent 最大的輸入來源之一，寫進程式碼的糾正，也更能重現。</p></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-loop-zh-mobile.svg"><img src="images/fig-loop-zh.svg" alt="低信任與高信任的 2 種迴圈：前者由 agent 寫出 slop、人驗證並找出問題；後者由 agent 寫出好程式碼並自行驗證。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/760" tabindex="0" role="button" aria-label="放大圖片：低信任與高信任的 2 種迴圈：前者由 agent 寫出 slop、人驗證並找出問題；後者由 agent 寫出好程式碼並自行驗證。"></picture><figcaption>圖：從人反覆驗證走向 agent 自行驗證，仍保留發現問題後回頭修改的迴圈（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div>
+<div class="rv"><p>壞模式也會被複製。她提醒，一個權宜之計留在庫裡，下一個 agent 就可能把它當成慣例；複製愈多，愈像理所當然（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=266s" target="_blank" rel="noopener noreferrer">4:26</a>）。她因此要求把程式碼庫整理乾淨，並在投影片提醒：有時仍該親自讀程式碼<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>。</p></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-copy-zh-mobile.svg"><img src="images/fig-copy-zh.svg" alt="一個權宜之計像橡皮章般把歪苗複製成一排，逐漸成為慣例，每次複製都讓下一次更容易發生。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/660" tabindex="0" role="button" aria-label="放大圖片：一個權宜之計像橡皮章般把歪苗複製成一排，逐漸成為慣例，每次複製都讓下一次更容易發生。"></picture><figcaption>圖：依投影片的複製效應重繪，蓋章與小苗為原創構圖（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div></div>
+</section>
+<section class="scene layout-sticky" id="scene-4" aria-labelledby="sc4-h1" data-title="Dune 把容易走錯的路，直接擋在架構裡">
+<div class="seed-packet"><span>場次 04</span><span>影片第 3 章 · 5:00–6:56</span></div><div class="rv"><h2 id="sc4-h1">Dune 把容易走錯的路，直接擋在架構裡</h2></div>
+<div class="scene-grid"><div class="scene-media rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-dune-zh-mobile.svg"><img src="images/fig-dune-zh.svg" alt="Dune 的 2 個頂層目錄 electron-renderer 與 electron-main 禁止互相匯入，連型別也不行，共用型別另放 shared。" width="960" height="600" loading="lazy" style="--ar-d:960/600;--ar-m:390/760" tabindex="0" role="button" aria-label="放大圖片：Dune 的 2 個頂層目錄 electron-renderer 與 electron-main 禁止互相匯入，連型別也不行，共用型別另放 shared。"></picture><figcaption>圖：以目錄結構與匯入禁令建立邊界（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div><div class="scene-steps"><div class="step rv"><p>影片第 3 章，5:00–6:56。Lauren 介紹團隊為 Grok Bot 建立的客戶端框架 Dune，形容它大概像 Electron 應用程式的 Next.js<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>。她關心的是裡面編入了哪些教訓；投影片列出一個資料夾對應一個功能、嚴格禁止匯入、程式碼不留註解三項約束（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=300s" target="_blank" rel="noopener noreferrer">5:00</a>）。</p></div>
+<div class="step rv"><p>useEffect 是她的例子。她承認它有適用情境，但用好需要細微判斷，agent 又常誤用。因此她的團隊禁止產品程式碼使用 useEffect，只在 Dune API 內部少數地方開放。依她的經驗，這讓審查時不必再反覆抓同一類問題（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=352s" target="_blank" rel="noopener noreferrer">5:52</a>）。</p></div>
+<div class="step rv"><p>她說他們在 Cursor 上看到，這個 Electron 應用程式裡，agent 常把 main 程式碼 import 進 renderer，造成長任務與卡頓<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>。她的團隊於是在 Grok Bot／Dune 用明確命名的目錄提供脈絡，再由相依圖分析器和 lint 規則禁止互相匯入（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=375s" target="_blank" rel="noopener noreferrer">6:15</a>）。投影片連型別都劃進禁令；邊界一旦能強制執行，就少一件需要人記住的審查工作。</p></div></div></div>
+</section>
+<section class="scene layout-stack" id="scene-5" aria-labelledby="sc5-h1" data-title="把註解換成會擋錯的規則，糾正才會留下來">
+<div class="seed-packet"><span>場次 05</span><span>影片第 4 章 · 6:56–9:40</span></div><div class="rv"><h2 id="sc5-h1">把註解換成會擋錯的規則，糾正才會留下來</h2></div>
+<div class="scene-flow"><div class="rv"><p>影片第 4 章，6:56–9:40。Lauren 觀察到，agent 會把 Markdown 文件、註解、rules 和 skills 當成替捷徑辯解的地方，也可能把一次小修正誇大成永久禁令。寫得愈多，不一定愈可靠。</p></div>
+<div class="rv"><p>她說他們在 Cursor 上看到的計時器問題很具體：agent 用 setTimeout、requestAnimationFrame、requestIdleCallback 快速修補，掩蓋 VS Code 命令式風格與 React 宣告式風格的衝突。她指出，大量計時器反覆建立、銷毀造成垃圾回收與卡頓；註解又替這些寫法辯護，讓問題繼續蔓延（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=444s" target="_blank" rel="noopener noreferrer">7:24</a>）。</p></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-comments-zh-mobile.svg"><img src="images/fig-comments-zh.svg" alt="註解數量從 7 月 31 日的 65,824 則降到投影片所稱現在的 1,227 則，兩根長條呈現明顯差距。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/560" tabindex="0" role="button" aria-label="放大圖片：註解數量從 7 月 31 日的 65,824 則降到投影片所稱現在的 1,227 則，兩根長條呈現明顯差距。"></picture><figcaption>圖：講者展示的註解數量前後對照（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div>
+<div class="rv"><p>她的團隊在 Grok Bot 決定禁用 99% 的註解<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>，投影片呈現 65,824→1,227<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>。她最在意的是註解無法強制執行；團隊改用 lint 規則，錯誤訊息還要指向根因，要求 agent 修真正的問題（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=502s" target="_blank" rel="noopener noreferrer">8:22</a>）。</p></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-corrections-zh-mobile.svg"><img src="images/fig-corrections-zh.svg" alt="每次糾正 agent 後逐階上升的折線，搭配寫 lint 擋下問題或從根本消除問題的原則，投影片未標縱軸單位。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/620" tabindex="0" role="button" aria-label="放大圖片：每次糾正 agent 後逐階上升的折線，搭配寫 lint 擋下問題或從根本消除問題的原則，投影片未標縱軸單位。"></picture><figcaption>圖：依講者脈絡，可將階梯理解為糾正逐步累積成檢查；確切計數單位未標示（<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>）。</figcaption></figure></div>
+<div class="rv"><p>她把原則推到審查工作上：糾正變成確定性檢查，或由 API 與架構消除整類問題，需要留意的事情就會減少。她描繪的終點，是某天發現已沒什麼需要再審，能讓 agent 自行合併大部分 PR（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=570s" target="_blank" rel="noopener noreferrer">9:30</a>）。</p></div></div>
+</section>
+<section class="scene layout-sticky" id="scene-6" aria-labelledby="sc6-h1" data-title="讓 agent 實際操作程式，審查就有成果可看">
+<div class="seed-packet"><span>場次 06</span><span>影片第 5 章 · 9:40–10:50</span></div><div class="rv"><h2 id="sc6-h1">讓 agent 實際操作程式，審查就有成果可看</h2></div>
+<div class="scene-grid"><div class="scene-media rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-featuremap-zh-mobile.svg"><img src="images/fig-featuremap-zh.svg" alt="功能地圖從起點分成 2 條支線，對應有哪些功能、使用者怎麼到達，以及什麼能證明它可用。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/620" tabindex="0" role="button" aria-label="放大圖片：功能地圖從起點分成 2 條支線，對應有哪些功能、使用者怎麼到達，以及什麼能證明它可用。"></picture><figcaption>圖：功能地圖把使用者描述與可驗證的操作連起來（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div><div class="scene-steps"><div class="step rv"><p>影片第 5 章，9:40–10:50。Lauren 接著交代審查怎麼縮小：她的團隊主要改看驗證產物，包括影片、截圖、圖表與形式驗證（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=590s" target="_blank" rel="noopener noreferrer">9:50</a>）。人仍要判斷成果，只是眼前多了程式實際運作的證據。</p></div>
+<div class="step rv"><p>執行期驗證在她的說明裡很直接：讓 agent 自己跑程式，也能使用 Chrome DevTools Protocol 等開發者的除錯工具。能操作還不夠，它得知道要去哪裡。團隊因此在 skill 裡放入功能地圖，從使用者角度列出有哪些功能，以及如何到達。</p></div>
+<div class="step rv"><p>這張地圖提供共通詞彙。當人提到「左側邊欄的那個小東西」，agent 就比較不必瞎猜指的是哪裡（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=629s" target="_blank" rel="noopener noreferrer">10:29</a>）。她的團隊還把自製 CLI 與 driver 放進 skills，讓操作方式能重複使用；她認為這既減少 token 消耗，也讓工具本身可以測試。從找功能到留下驗證產物，agent 因而有一條可反覆走的路。</p></div></div></div>
+</section>
+<section class="scene layout-sticky" id="scene-7" aria-labelledby="sc7-h1" data-title="形式驗證讓狀態與演算法多一層檢查">
+<div class="seed-packet"><span>場次 07</span><span>影片第 6 章 · 10:50–11:51</span></div><div class="rv"><h2 id="sc7-h1">形式驗證讓狀態與演算法多一層檢查</h2></div>
+<div class="scene-grid"><div class="scene-media rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-formal-zh-mobile.svg"><img src="images/fig-formal-zh.svg" alt="形式驗證的 2 種工具：TLA+ 建立狀態機模型並檢查規則，Lean 為程式碼寫證明並檢查每一步推論。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/760" tabindex="0" role="button" aria-label="放大圖片：形式驗證的 2 種工具：TLA+ 建立狀態機模型並檢查規則，Lean 為程式碼寫證明並檢查每一步推論。"></picture><figcaption>圖：依投影片重繪的 TLA+ 與 Lean 分工（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div><div class="scene-steps"><div class="step rv"><p>影片第 6 章，10:50–11:51。Lauren 介紹團隊近期的實驗：用 TLA+ 對主要使用者流程做模型檢查，例如跨裝置、跨平台的通知；另用 Lean 證明特定演算法，例子是自製虛擬化函式庫中的畫面閃爍與抖動問題（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=654s" target="_blank" rel="noopener noreferrer">10:54</a>）。</p></div>
+<div class="step rv"><p>她沒有把這套方法說成已經完成的答案。團隊仍在實驗，雖然已抓到不少 bug，她也明說它不是萬靈丹，只是 agent 環境中再疊上一層工具（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=676s" target="_blank" rel="noopener noreferrer">11:16</a>）。</p></div>
+<div class="step rv"><p>UI 也有另一條檢查路徑。她展示團隊剛開始使用 Bombadil<span class="tier t-primary" title="repo 或官方頁可直接查到">一手</span>做屬性測試，並表示已找到幾個 UI bug（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=703s" target="_blank" rel="noopener noreferrer">11:43</a>）。這裡的重點仍是增加驗證方式：程式跑得動之外，還要能檢查狀態轉換與實作是否符合預期。</p></div></div></div>
+</section>
+<section class="scene layout-stack" id="scene-8" aria-labelledby="sc8-h1" data-title="token 大多花在驗證，才有條件相信產生的程式碼">
+<div class="seed-packet"><span>場次 08</span><span>影片第 7 章 · 11:51–13:32</span></div><div class="rv"><h2 id="sc8-h1">token 大多花在驗證，才有條件相信產生的程式碼</h2></div>
+<div class="scene-flow"><div class="rv"><p>影片第 7 章，11:51–13:32。Lauren 引用 Cindy Sridharan 的兩則推文：2026-05-15 那則談到帶著細微 bug 的 AI PR 被合併，後續得花力氣人工修補；到了後一則，重點轉為補齊驗證流程<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>。</p></div>
+<div class="rv"><aside class="note"><p>70% of my daily token spend goes into verifying patches, and only ~20-30% into creating them.</p><p>（Cindy Sridharan @copyconstruct，投影片顯示的 2026-11-05 推文；X 頁面本機抓不到，只憑投影片<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）</p></aside></div>
+<div class="rv"><p>也就是每天約七成 token 用在驗證修補，只有約兩至三成用在產生。Lauren 認為這符合自己的觀察：她大部分 token 也花在驗證上（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=735s" target="_blank" rel="noopener noreferrer">12:15</a>）。</p></div>
+<div class="rv"><p>她接著指出，這些技術過去就存在，只是理解、撰寫與維護的成本可能高到難以採用。agent 降低了成本，讓更深入的測試變得划算；她因此認為軟體測試與驗證正在進入黃金時代（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=750s" target="_blank" rel="noopener noreferrer">12:30</a>）。</p></div>
+<div class="rv"><p>驗證也能用來確認產品意圖。她介紹 pstack 裡的 statechart skill<span class="tier t-primary" title="repo 或官方頁可直接查到">一手</span>，把使用者眼中的狀態機畫出來，搭配影片與截圖，讓審查更容易（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=782s" target="_blank" rel="noopener noreferrer">13:02</a>）。在她的工作裡，驗證產物開始成為理解變更的入口。</p></div></div>
+</section>
+<section class="scene layout-stack" id="scene-9" aria-labelledby="sc9-h1" data-title="PR 增加時，她也把發布節奏與還原率攤開來看">
+<div class="seed-packet"><span>場次 09</span><span>影片第 8 章 · 13:32–15:11</span></div><div class="rv"><h2 id="sc9-h1">PR 增加時，她也把發布節奏與還原率攤開來看</h2></div>
+<div class="scene-flow"><div class="rv"><p>影片第 8 章，13:32–15:11。Lauren 展示團隊投入之後的成果：10 月合併 10,926 個 PR，6–10 月合計 23,370<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>；她以約 11,000 個 PR 描述上月交付量（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=817s" target="_blank" rel="noopener noreferrer">13:37</a>）。個人曲線與團隊曲線放在一起，呈現她所說的產量變化。</p></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-prs-personal-zh-mobile.svg"><img src="images/fig-prs-personal-zh.svg" alt="個人每月 PR 從 3 月 68 個升到 10 月 3,127 個，3–10 月合計 10,732 個。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/560" tabindex="0" role="button" aria-label="放大圖片：個人每月 PR 從 3 月 68 個升到 10 月 3,127 個，3–10 月合計 10,732 個。"></picture><figcaption>圖：講者個人上線 PR 的月份分布（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-prs-team-zh-mobile.svg"><img src="images/fig-prs-team-zh.svg" alt="團隊每月合併 PR 從 6 月 809 個升到 10 月 10,926 個，6–10 月合計 23,370 個。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/560" tabindex="0" role="button" aria-label="放大圖片：團隊每月合併 PR 從 6 月 809 個升到 10 月 10,926 個，6–10 月合計 23,370 個。"></picture><figcaption>圖：團隊圖表的統計名稱為合併 PR（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div>
+<div class="rv"><p>客戶端發布也跟著加快：8、9、10 月分別發布 7、19、15 次<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>。她形容大約每天有一個穩定版，並提到 10 月約有 227 人至少貢獻一個 PR<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>；其中包括未必掌握很多背景的臨時貢獻者。</p></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-releases-zh-mobile.svg"><img src="images/fig-releases-zh.svg" alt="桌面版在 8、9、10 月分別發布 7、19、15 次，合計 41 次；兩次發布中位間隔分別為 44、25、28 小時。" width="960" height="620" loading="lazy" style="--ar-d:960/620;--ar-m:390/620" tabindex="0" role="button" aria-label="放大圖片：桌面版在 8、9、10 月分別發布 7、19、15 次，合計 41 次；兩次發布中位間隔分別為 44、25、28 小時。"></picture><figcaption>圖：每月發布次數及兩次發布的中位間隔（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-revert-zh-mobile.svg"><img src="images/fig-revert-zh.svg" alt="被還原的 commits 占比由 6 月 0.98% 降至 7 月 0.61%，8、9、10 月依序為 0.47%、0.48%、0.47%。" width="960" height="560" loading="lazy" style="--ar-d:960/560;--ar-m:390/560" tabindex="0" role="button" aria-label="放大圖片：被還原的 commits 占比由 6 月 0.98% 降至 7 月 0.61%，8、9、10 月依序為 0.47%、0.48%、0.47%。"></picture><figcaption>圖：投影片以 commits 為單位呈現還原率（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div>
+<div class="rv"><p>她用還原率回應「這難道不會變成一堆 slop 嗎？」的疑問，形容比例穩定在約 0.5%<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=861s" target="_blank" rel="noopener noreferrer">14:21</a>）。她接著談效能：相較剛推出時，啟動、輸入、開新對話與切換對話都變快了；對一個交付速度這麼高、參與人數這麼多的 Electron 應用程式，她認為這樣的表現「相當不錯」。</p></div></div>
+</section>
+<section class="scene layout-stack" id="scene-10" aria-labelledby="sc10-h1" data-title="先讓內圈可靠，再替它接上自動觸發">
+<div class="seed-packet"><span>場次 10</span><span>影片第 9 章 · 15:11–17:31</span></div><div class="rv"><h2 id="sc10-h1">先讓內圈可靠，再替它接上自動觸發</h2></div>
+<div class="scene-flow"><div class="rv"><p>影片第 9 章，15:11–17:31。Lauren 收尾時把順序講得很清楚：下次糾正 agent，先改善程式碼庫；建立 lint 規則擋住新反模式，再清掉舊模式，接著把驗證做扎實（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=911s" target="_blank" rel="noopener noreferrer">15:11</a>）。這些投入是她走向自動化的先決條件。</p></div>
+<div class="rv"><p>她警告，內圈寫程式的迴圈如果一直產出 slop，自動化只會放大產量，還得投入更多 token 收拾。前面低信任與高信任的差別，到這裡成了能否擴大運作的條件：先把寫程式、驗證、修正這個循環做好，才有基礎接上外圈。</p></div>
+<div class="rv"><p>她以 Grok Bot 說明外圈的角色：啟動 Cursor 專案與雲端 agent，編排後續工作。依她的團隊經驗，每次發布新版本，Grok Bot 就啟動 Cursor 專案，實際操作整個應用程式做模糊測試；找到 bug 後開修復 PR，再自動合併<span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=981s" target="_blank" rel="noopener noreferrer">16:21</a>）。</p></div>
+<div class="rv"><p>她把這種做法歸因於程式碼庫已整理到 PR 往往預設就有好品質，大多數產品程式碼不再需要深入的人工審查（<a href="https://www.youtube.com/watch?v=O_zcc6Xl12g&amp;t=1004s" target="_blank" rel="noopener noreferrer">16:44</a>）。</p></div></div>
+</section>
+<section class="scene layout-stack" id="scene-11" aria-labelledby="sc11-h1" data-title="數字背後：統計口徑與公開佐證決定能讀到哪裡">
+<div class="seed-packet"><span>場次 11</span><span>延伸閱讀</span></div><div class="rv"><h2 id="sc11-h1">數字背後：統計口徑與公開佐證決定能讀到哪裡</h2></div>
+<div class="scene-flow"><div class="rv"><div class="table-scroll" tabindex="0" role="region" aria-label="表格（可左右捲動）"><table><thead><tr><th scope="col">要核對的事</th><th scope="col">帳本記錄與閱讀界線</th></tr></thead><tbody><tr><td class="k" data-label="要核對的事">成果從哪裡來</td><td data-label="帳本記錄與閱讀界線">PR、發布、註解、效能與還原率均來自講者簡報，沒有獨立第二來源<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>。</td></tr><tr><td data-label="要核對的事">PR 與還原率的單位</td><td data-label="帳本記錄與閱讀界線">團隊圖寫 merged，口述為 shipped to production；還原率圖的單位是 commits，口述卻說 PR，兩組用語不能直接視為相同<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span><span class="tier t-speaker" title="只有口述，沒有畫面或公開來源">講者</span>。</td></tr><tr><td class="k" data-label="要核對的事">約每天一個穩定版</td><td data-label="帳本記錄與閱讀界線">口述是近似描述；圖上 9、10 月的兩次發布中位間隔為 25、28 小時，並非保證每天發布<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>。</td></tr><tr><td class="k" data-label="要核對的事">效能也有退步</td><td data-label="帳本記錄與閱讀界線">記憶體 +12%、閒置 CPU +100%、啟動 js+css +285%、視窗縮放耗時 +130%，冷開長聊天也增加 8%<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>。</td></tr><tr><td data-label="要核對的事">哪些工具可公開核對</td><td data-label="帳本記錄與閱讀界線">Dune 與 Grok Bot 使用 Electron 尚無公開佐證，僅有講者自述；pstack 與 Bombadil 則有可查的原始 repo<span class="tier t-primary" title="repo 或官方頁可直接查到">一手</span>。</td></tr><tr><td class="k" data-label="要核對的事">禁令留下哪些取捨</td><td data-label="帳本記錄與閱讀界線">禁 99% 註解與禁 useEffect 是她的團隊選擇；講者未談代價，不能直接當成所有專案的通則<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>。</td></tr></tbody></table></div></div>
+<div class="rv"><figure class="section-figure"><picture><source media="(max-width: 640px)" srcset="images/fig-perf-zh-mobile.svg"><img src="images/fig-perf-zh.svg" alt="效能對照同時列出改善與退步：冷啟動減少 39%，長聊天輸入中位耗時減少 65%；閒置記憶體增加 12%、CPU 增加 100%、啟動 js+css 增加 285%、視窗縮放耗時增加 130%。" width="960" height="620" loading="lazy" style="--ar-d:960/620;--ar-m:390/1370" tabindex="0" role="button" aria-label="放大圖片：效能對照同時列出改善與退步：冷啟動減少 39%，長聊天輸入中位耗時減少 65%；閒置記憶體增加 12%、CPU 增加 100%、啟動 js+css 增加 285%、視窗縮放耗時增加 130%。"></picture><figcaption>圖：依投影片重繪效能全表；講者底註承認有天花板，並表示正考慮 Rust 重寫的想法（<span class="tier t-screen" title="講者簡報上的數據，沒有獨立第二來源">畫面</span>）。</figcaption></figure></div>
+<div class="rv"><p>身分資料也有不同寫法：影片版面標 Principal Engineer／SpaceX；poteto 的 GitHub 檔案則寫 Software Engineer、任職 @xai-org，另列 React compiler core team<span class="tier t-primary" title="repo 或官方頁可直接查到">一手</span>。本文開場採影片標示。Grok Bot 官方頁可確認產品已離開 beta<span class="tier t-primary" title="repo 或官方頁可直接查到">一手</span>；帳本所記 beta 2026-08-11、1.0 2026-11-11 則屬二手時程。Bret Taylor 軼事也僅有他人轉述，兩者都未見官方原文<span class="tier t-secondary" title="媒體轉述，未見官方原文">二手</span>。</p></div></div>
+</section>
+<section class="scene layout-stack" id="scene-12" aria-labelledby="sc12-h1" data-title="可以帶走的做法：下次糾正時，多留下一道檢查">
+<div class="seed-packet"><span>場次 12</span><span>延伸閱讀</span></div><div class="rv"><h2 id="sc12-h1">可以帶走的做法：下次糾正時，多留下一道檢查</h2></div>
+<div class="scene-flow"><div class="rv"><p>以下三步是本文依講者經驗整理的實作起點<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>。</p></div>
+<div class="rv"><ol class="takeaways"><li>先問這個錯誤能在哪一層擋住。遇到錯誤匯入，就檢查目錄與相依邊界；遇到容易誤用的 API，就檢查能否收斂入口。先找程式碼裡能承接糾正的位置，再判斷是否還需要自然語言規則<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>。</li><li>把常被糾正的模式變成 lint 規則，連錯誤訊息一起設計。訊息要能把 agent 帶回根因，並清理庫裡既有的壞範例，免得下一輪又照抄；只擋新寫法，舊模式仍可能持續提供錯誤示範<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>。</li><li>審 diff 前先看驗證產物。要求能對應使用者流程的影片、截圖或狀態圖，確認 agent 實際走過哪條路、留下什麼證據；若產物還看不出它是否理解需求，就把缺的那一段補進驗證流程<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>。</li></ol></div>
+<div class="rv"><p>不用從她的 PR 數量起跑。挑一個你已經糾正過多次的問題，讓下一個 agent 再走到那裡時，真的遇得到一道檢查<span class="tier t-inference" title="本文歸納，講者沒有這樣說">推論</span>。</p></div></div>
+</section>
+<section class="scene layout-stack" id="scene-13" aria-labelledby="sc13-h1" data-title="製作說明：這篇導讀由 AI 模型完成">
+<div class="seed-packet"><span>場次 13</span><span>延伸閱讀</span></div><div class="rv"><h2 id="sc13-h1">製作說明：這篇導讀由 AI 模型完成</h2></div>
+<div class="scene-flow"><div class="rv"><p>規劃與審稿由 Claude Opus 負責，主文與圖表由 Codex（gpt-6-astra）依企劃與證據帳本製作。本文沒有經過人工逐句校稿。</p></div>
+<div class="rv"><p>agy（gemini-3.8-flash）分 9 段觀看影片，校正字幕並盤點投影片。中文字幕由 agy 翻譯，再由 Opus 逐句閱讀；poteto、Grok Bot、Dune、TLA+ 等機器字幕的誤聽已更正。事實查證用 GitHub API、官方頁與網路搜尋，結果記在證據帳本；agy 的描述只當線索；用在圖表的數字與文字，Opus 另用影格逐張核對（未逐張核對全部投影片）。</p></div>
+<div class="rv"><p>本文圖表是依投影片資訊重繪的 SVG，並非講者原圖；封面與插圖為 AI 生成，角色為原創，視覺風格受講者簡報啟發。講者簡報與影片版權屬原權利人。</p></div>
+<div class="rv"><p>可搭配<a href="translation-zh.html">全文繁中譯文</a>與<a href="player.html">雙語字幕播放器</a>閱讀，並由各段時間連結回到原片。</p></div></div>
+</section>
+<section class="scene layout-stack" id="scene-14" aria-labelledby="sc14-h1" data-title="來源清單">
+<div class="seed-packet"><span>場次 14</span><span>延伸閱讀</span></div><div class="rv"><h2 id="sc14-h1">來源清單</h2></div>
+<div class="scene-flow"><div class="rv"><h3>一手</h3></div>
+<div class="rv"><ul class="sources"><li><a href="https://github.com/cursor/plugins/tree/main/pstack" target="_blank" rel="noopener noreferrer">pstack repo</a>：確認 statechart、no-comments、create-formal-verification-skill 三個 skill 存在。</li><li><a href="https://github.com/antithesishq/bombadil" target="_blank" rel="noopener noreferrer">Bombadil repo</a>：網頁與終端機 UI 的屬性測試工具。</li><li><a href="https://x.ai/bot" target="_blank" rel="noopener noreferrer">Grok Bot 官方產品頁</a>：頁面標示已離開 beta。</li><li><a href="https://github.com/poteto" target="_blank" rel="noopener noreferrer">poteto 的 GitHub 個人檔案</a>：講者自填身分與任職；帳本查證日期為 2026-11-15。</li></ul></div>
+<div class="rv"><h3>影片</h3></div>
+<div class="rv"><ul class="sources"><li><a href="https://www.youtube.com/watch?v=O_zcc6Xl12g" target="_blank" rel="noopener noreferrer">All Code Is Slop (Except Mine) — Lauren Tan</a>：AI Engineer 頻道，2026-11-14 上傳。</li></ul></div>
+<div class="rv"><h3>畫面</h3></div>
+<div class="rv"><ul class="sources"><li>同一影片的投影片：倒金字塔、架構與驗證示意、成果圖表、Cindy Sridharan 引句。重繪圖與口述時間連結保留在相關場內。</li></ul></div>
+<div class="rv"><h3>二手（未見官方原文）</h3></div>
+<div class="rv"><ul class="sources"><li><a href="https://aiweekly.co/alerts/spacexai-and-cursor-ship-grok-bot-beta-on-mac-ios-pc-linux" target="_blank" rel="noopener noreferrer">AI Weekly：SpaceXAI and Cursor ship Grok Bot beta on Mac, iOS, PC, Linux</a>：標示發表於 2026-08-11（beta 開始）；媒體彙整稿，未見官方原文。</li><li><a href="https://www.webpronews.com/grok-bot-1-0-shared-teammates-teams-meetings/" target="_blank" rel="noopener noreferrer">WebProNews：Grok Bot 1.0 離開 beta</a>：2026-11-11 離開 beta 的說法；本機抓取回 403，只看過搜尋摘要，未實讀。</li><li><a href="https://grapevine.in/post/Gmail-creator-Paul-Buchheit-on-how-Bret-Taylor-once-rewrote-Google-Maps-in-a-single-weekend-620aaab4-62d3-48ac-ba79-e6309cc6865a" target="_blank" rel="noopener noreferrer">Grapevine：Paul Buchheit 談 Bret Taylor 一個週末重寫 Google Maps</a>：本機抓取回 429，只看過搜尋摘要，未實讀；沒有 Bret Taylor 本人的說法，只當 Lauren 轉述的軼事。</li></ul></div></div>
+</section>
+</main><footer class="pagefoot"><p>本頁為 AI Engineer 頻道 Lauren Tan〈All Code Is Slop (Except Mine)〉的非官方導讀。分析與撰稿由 AI 模型完成，未經人工逐句校稿；封面與插圖為 AI 生成，英文為機器字幕、中文為 AI 翻譯，未逐句對照原音。視覺風格受講者簡報啟發，角色與構圖為原創；講者簡報與影片版權屬原權利人。</p><p>另見：<a href="index.html">解說動畫</a>、<a href="player.html">雙語字幕播放器</a>、<a href="translation-zh.html">全文譯文</a>。</p></footer>
+</div>
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="圖片放大檢視"><button type="button" aria-label="關閉放大檢視">關閉（Esc）</button><img alt=""></div>
+<script>
+(function(){
+  var box=document.getElementById('lightbox'), big=box.querySelector('img'), btn=box.querySelector('button'), last=null;
+  function open(img){last=img;big.src=img.currentSrc||img.src;big.alt=img.alt;box.classList.add('is-open');btn.focus();}
+  function close(){box.classList.remove('is-open');big.removeAttribute('src');if(last){last.focus();}}
+  document.querySelectorAll('figure img').forEach(function(img){
+    img.addEventListener('click',function(){open(img);});
+    img.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open(img);}});
+  });
+  box.addEventListener('click',function(e){if(e.target===box||e.target===btn){close();}});
+  document.addEventListener('keydown',function(e){
+    if(!box.classList.contains('is-open'))return;
+    if(e.key==='Escape'){close();}
+    if(e.key==='Tab'){e.preventDefault();btn.focus();}
+  });
+})();
+</script>
+<script>
+(function(){
+  window.__scrolly=1;
+  var live=document.documentElement.classList.contains('live');
+  var rvs=[].slice.call(document.querySelectorAll('.rv'));
+  function countUp(s){
+    var n=s.querySelector('.num');
+    if(!n||!n.hasAttribute('data-target'))return; // 不是數字的卡直接顯示，不做倒數（否則會被寫成空白）
+    var t=parseFloat(n.getAttribute('data-target')),dec=+n.getAttribute('data-dec'),
+        comma=n.getAttribute('data-comma')==='1',pre=n.getAttribute('data-prefix')||'',suf=n.getAttribute('data-suffix')||'',
+        fin=n.getAttribute('data-final'),t0=null,dur=1100;
+    function fmt(v){var x=v.toFixed(dec);if(comma){x=Number(x).toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec});}return pre+x+suf;}
+    function step(ts){if(t0===null)t0=ts;var p=Math.min((ts-t0)/dur,1),e=1-Math.pow(1-p,3);n.textContent=p<1?fmt(t*e):fin;if(p<1)requestAnimationFrame(step);}
+    requestAnimationFrame(step);
+  }
+  if(live){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(en){
+        if(!en.isIntersecting)return;
+        var e=en.target;e.classList.add('is-in');io.unobserve(e);
+        if(e.classList.contains('stat'))countUp(e);
+      });
+    },{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+    rvs.forEach(function(e){io.observe(e);});
+    var so=new IntersectionObserver(function(es){
+      es.forEach(function(en){en.target.classList.toggle('is-active',en.isIntersecting);});
+    },{rootMargin:'-38% 0px -38% 0px'});
+    [].slice.call(document.querySelectorAll('.layout-sticky .step')).forEach(function(s){so.observe(s);});
+  }else{
+    rvs.forEach(function(e){e.classList.add('is-in');});
+    [].slice.call(document.querySelectorAll('.layout-sticky .step')).forEach(function(s){s.classList.add('is-active');});
+  }
+  var scenes=[].slice.call(document.querySelectorAll('section.scene')),dots=[].slice.call(document.querySelectorAll('nav.dots a')),
+      bar=document.querySelector('.progress i'),tick=false;
+  function update(){
+    tick=false;
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.width=(h>0?Math.min(window.scrollY/h,1)*100:100)+'%';
+    var y=window.innerHeight*0.4,idx=-1;
+    scenes.forEach(function(s,i){if(s.getBoundingClientRect().top<=y)idx=i;});
+    dots.forEach(function(a,i){a.classList.toggle('is-active',i===idx);if(i===idx){a.setAttribute('aria-current','true');}else{a.removeAttribute('aria-current');}});
+  }
+  window.addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(update);}},{passive:true});
+  window.addEventListener('resize',update);
+  update();
+})();
+
+/* Progressive enhancement only: the complete article exists without JavaScript. */
+(function(){
+  'use strict';
+  var root=document.documentElement;
+  var scheme=matchMedia('(prefers-color-scheme: dark)');
+  var motion=matchMedia('(prefers-reduced-motion: reduce)');
+  var toggle=document.querySelector('.theme-toggle');
+  var saved=null;
+  try{saved=localStorage.getItem('lauren-garden-theme');}catch(e){}
+  if(saved==='light'||saved==='dark')root.dataset.theme=saved;
+  function isDark(){return root.dataset.theme?root.dataset.theme==='dark':scheme.matches;}
+  function label(){if(!toggle)return;toggle.textContent=isDark()?'淺色':'深色';toggle.setAttribute('aria-label','切換'+(isDark()?'淺色':'深色')+'模式');}
+  if(toggle){toggle.hidden=false;label();toggle.addEventListener('click',function(){root.dataset.theme=isDark()?'light':'dark';try{localStorage.setItem('lauren-garden-theme',root.dataset.theme);}catch(e){}label();update();});}
+  scheme.addEventListener('change',function(){label();update();});
+  var growth=document.querySelector('.growth-meter'),scheduled=false;
+  function update(){
+    scheduled=false;
+    if(!growth)return;
+    var total=root.scrollHeight-innerHeight;
+    var p=total>0?Math.max(0,Math.min(scrollY/total,1)):1;
+    if(motion.matches){root.style.removeProperty('--field');root.style.removeProperty('--growth');root.style.removeProperty('--ripe');return;}
+    root.style.setProperty('--growth',p.toFixed(4));
+    root.style.setProperty('--ripe',Math.max(0,Math.min((p-.92)/.08,1)).toFixed(4));
+    var from=isDark()?[36,52,41]:[231,239,218],to=isDark()?[59,53,35]:[250,232,184];
+    root.style.setProperty('--field','rgb('+from.map(function(v,i){return Math.round(v+(to[i]-v)*p);}).join(',')+')');
+  }
+  addEventListener('scroll',function(){if(!scheduled){scheduled=true;requestAnimationFrame(update);}},{passive:true});
+  addEventListener('resize',update);
+  motion.addEventListener('change',function(){
+    if(motion.matches){root.classList.remove('live');document.querySelectorAll('.rv').forEach(function(e){e.classList.add('is-in');});}
+    update();
+  });
+  update();
+  // Keep the core focus trap and focus restoration; lock background scrolling.
+  var box=document.querySelector('.lightbox');
+  if(box){new MutationObserver(function(){var open=box.classList.contains('is-open');document.body.style.overflowY=open?'hidden':'';}).observe(box,{attributes:true,attributeFilter:['class']});}
+})();
+</script>
+</body>
+</html>
